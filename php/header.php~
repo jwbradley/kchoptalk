@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<title>KC Hop Talk</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+	<meta name="author" content="james" >
+	<meta name="Keywords" content="Kansas City Hop Talk is the place to find out about craft beers, craft brewing, and related topics in the Kansas City Metro Area">
+	<meta name="distribution" content="GLOBAL">
+	<meta name="copyright" content="Copyright&copy; 2012-<?php echo date("Y"); ?> KC Hop Talk">
+	<meta name="Description" content="KC Hop Talk is constantly looking out for news and information related to craft beers and craft brewing that directly impacts the Kansas City Craft Beer Consumers.">
+
+	<meta name="bitly-verification" content="e56b7140b514"/>
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta http-equiv="cleartype" content="on">
+	
+	<meta property="og:title" content="Kansas City Hop Talk is the place to find out about craft beers, craft brewing, and related topics in the Kansas City Metro Area"/>
+	<meta property="og:url" content="http://kchoptalk.com/" />
+	<meta property="og:image" content="http://kchoptalk.com/Pics/KCHopTalkLogo9.png"/>
+	<meta property="og:site_name" content="Kansas City Hop Talk"/>
+	<meta property="og:description" content="KC Hop Talk is constantly looking out for news and information related to craft beers and craft brewing that directly impacts the Kansas City Craft Beer Consumers."/>
+	
+	<link rel="image_src" href="http://kchoptalk.com/Pics/KCHopTalkLogo9.png"/>
+	
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://kchoptalk.com/Pics/KCHTLogo-144x144.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://kchoptalk.com/Pics/KCHTLogo-114x114.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://kchoptalk.com/Pics/KCHTLogo-72x72.png">
+	<link rel="apple-touch-icon-precomposed" href="http://kchoptalk.com/Pics/KCHTLogo-57x57.png">
+	<link rel="shortcut icon" href="http://kchoptalk.com/Pics/KCHopTalkLogo9.png">
+
+	<!-- Tile icon for Win8 (132x144 + tile color) -->
+	<meta name="msapplication-TileImage" content="http://kchoptalk.com/Pics/KCHTLogo-144x144.png">
+	<meta name="msapplication-TileColor" content="#222222">
+
+<link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="../css/kcht.css" />
+
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37565453-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+
+
+
+</head>  
+
+<body>
+
