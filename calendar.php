@@ -12,7 +12,6 @@
     $pageDetails->menu_bar("KC Beer Events", "", $cur_page);
 
 ?>
-
     <div class="container" id="main">
       <div class="row">
         <div class="col-xs-12 " >
