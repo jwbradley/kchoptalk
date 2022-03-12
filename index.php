@@ -2,31 +2,6 @@
 
     ini_set("error_log", "./logs/BeerErrors.log");
 
-    // [root@uxtawdwiki01 bcp_stage]# gdb php
-    // run -d xdebug.auto_trace=ON -d xdebug.trace_output_dir=/var/log/httpd /apps/joomla/bcp_stage/batchconfig_loader.php
-
-    // Turn off all error reporting
-    // error_reporting(0);
-
-    // Report simple running errors
-    // error_reporting(E_ERROR | E_WARNING | E_PARSE);
-
-    // Reporting E_NOTICE can be good too (to report uninitialized
-    // variables or catch variable name misspellings ...)
-    // error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
-
-    // Report all errors except E_NOTICE
-    // error_reporting(E_ALL & ~E_NOTICE);
-
-    // Report all PHP errors (see changelog)
-    // error_reporting(E_ALL);
-
-    // Report all PHP errors
-    // error_reporting(-1);
-
-    // Same as error_reporting(E_ALL);
-    // ini_set('error_reporting', E_ALL);
-
     include './php/HTFunctions.php';
     include('./php/class.bufferapp.php' );
     include('./php/header.php' );
@@ -67,9 +42,6 @@
           foreach($returnData as $key=>$allLinkData) {
             if (is_array($allLinkData)) {
               foreach($allLinkData as $key2=>$theLink) {
-                // echo "\n<!-- this is the \$theLink details and the \$key2 is {$key2} -- ";
-                // var_dump($theLink);
-                // echo "  -->\n";
                 $descript = '';
                 $hrefLink = '';
                 $headline = '';
@@ -81,22 +53,6 @@
                   $headline    = substr($theLink['text'], 0, strrpos($theLink['text'], 'http') );                  
                   $hrefDesc    =  ($theLink['media']['title'] == '404' ? '' : $theLink['media']['description']);;
                     
-                // } else if  (strrpos($theLink['text'], 'http://') > 0 ) {
-                //   $hrefLink    = htmlspecialchars( substr($theLink['text'], strrpos($theLink['text'], 'http://'),  strlen($theLink['text'])-strrpos($theLink['text'], 'http://' ) ) ) ;
-                //   $headline    = substr($theLink['text'], 0, strrpos($theLink['text'], 'http://' ) );
-                
-              
-
-
-                // if ((strrpos($theLink['text'], 'https://') != 0 ) || (strrpos($theLink['text'], 'http://') != 0 ) ) { 
-                //     // echo "\n<!-- if loop nest 2 -->\n ";
-                //     $hrefLink    =  htmlspecialchars( $theLink['media']["link"] ) ;
-                //     $PageTitle   =  $theLink['media']['title'];
-                //     $hrefDesc    =  $theLink['media']['description'];
-                //     $hrefPrev    =  $theLink['media']['preview'];
-                //     $hrefPSafe   =  $theLink['media']['preview_safe'];
-                //     $hrefExplnk  =  $theLink['media']['expanded_link'];
-                //     $hrefThumb   =  $theLink['media']['thumbnail'];
                 } else if ((strrpos($theLink['text'], 'https://') == 0 ) && (strrpos($theLink['text'], 'http://') == 0 ) ) { 
                     $hrefLink    =  htmlspecialchars( $theLink['media']["link"] ) ;
                     $headline    =  $theLink['text'];
@@ -105,20 +61,6 @@
                     $hrefThumb   =  $theLink['media']['thumbnail'];
                 }
 
-                // if ((strrpos($theLink['text'], 'https://') != 0 ) || (strrpos($theLink['text'], 'http://') != 0 ) ) { 
-                //     // echo "\n<!-- if loop nest 2 -->\n ";
-                //     $hrefLink    = htmlspecialchars( $theLink['media']["link"] ) ;
-                //     $PageTitle   = $theLink['media']['title'];
-                //     $hrefDesc    = $theLink['media']['description'];
-                //     $hrefThumb   = $theLink['media']['thumbnail'];
-                // } else if ((strrpos($theLink['text'], 'https://') == 0 ) && (strrpos($theLink['text'], 'http://') == 0 ) ) { 
-                //     // echo "\n<!-- if loop nest 3 -->\n ";
-                //     $hrefLink    = htmlspecialchars( $theLink['media']["link"] ) ;
-                //     $PageTitle   = $theLink['text'];
-                //     $hrefTitle   = ($theLink['media']['title'] == '404' ? '' : $theLink['media']['title']);
-                //     $hrefDesc    = ($theLink['media']['title'] == '404' ? '' : $theLink['media']['description']);
-                //     $hrefThumb   = $theLink['media']['thumbnail'];
-                // } 
 
                 if (($beerNews->linkfilters($hrefLink) === false) && isset($hrefLink) && ($hrefLink != '') ) {
                   /* Base64 Encoded -- Harder to read on the page.*/
