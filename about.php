@@ -1,80 +1,36 @@
 <?php
-      include './php/HTFunctions.php';
-      include('./php/class.bufferapp.php' );
-      include('./php/header.php' );
+
+    ini_set("error_log", "./logs/BeerErrors.log");
+    include './php/HTFunctions.php';
+    include('./php/class.bufferapp.php' );
+    include('./php/header.php' );
+    include('./php/kc_class.php');
+    echo "\n</head>\n<body>\n";
+
+    $cur_page    = '.' . htmlspecialchars($_SERVER["PHP_SELF"]);
+    $pageDetails = new kcbeerclass();
+    $pageDetails->menu_bar("About Page", "", $cur_page);
+    $Originated  = new DateTime("2012-04-01");
+    $CurrentDate = new DateTime(date("Y-m-d"));
+    $SiteAge     = $Originated->diff($CurrentDate);
+    $f           = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+
 ?>
-
-
-  </head>
-
-
-
-  <body>
-
-
-    <!-- Start Fixed navbar -->
- <nav id="LC-navbar" class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <div id="LC-navbar-header" class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#LC-navbar-collapse">
-                    <span class="sr-only"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-
-                <a id="LC-navbar-brand" class="navbar-brand" href="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                    <img style="background-color:#ffffff;" src="./Pics/KCHopTalkLogo-172x172.png">    
-                    <!-- <img src="./Pics/KCHopTalkLogo-172x172.jpg">     -->
-                </a>
-                <div class="navbar-name">KC Hop Talk</div>
-                <div class="navbar-page">About Us</div>
-                <!-- <div class="navbar-page-tag"></div> -->
-                
-            </div>
-
-            <div id="LC-navbar-collapse" class="collapse navbar-collapse">
-                <ul id="LC-navbar-links" class="nav navbar-nav navbar-right">
-                    <li><a href="./index.php">News</a></li>
-                    <li><a href="./blog.php">Blog</a></li>
-                    <li><a href="./kcbreweries.php">Breweries</a></li>
-                    <li><a href="./calendar.php">Events</a></li> 
-                    <li><a href="./about.php">About</a></li>
-                    <!-- <li><a href="./contact.php">Contact Us</a></li> -->
-                </ul>
-            </div>
-        </div>
-    </nav> <!-- End Fixed navbar -->
 
     <div class="container" id="main">
       <div class="row">
-
         <div class="col-xs-12 " >
             <div id="about-kcht" align="left">
 	            <div hidden><h1>About KCHOPTALK</h1></div>
-                <p style="font-size: 18px;">Kansas City Hop Talk is interested in keeping beer fans informed about all things related to craft beer in Kansas City. This is done through constant monitoring of various blogs, social media and news sites for articles on craft beer and how craft brewing relates to Beer Enthusiasts. KC Hop Talk is dedicated to deliver the most up-to-date information about news and events relating to “Craft Beer” in the Kansas City Community and place the content on the internet in an easy to use format.</p>
+                <p style="font-size: 18px;">For the past <? echo trim($f->format($SiteAge->y)); ?> years Kansas City Hop Talk has been a popular content curation site intent on keeping local beer enthusiasts informed about craft beer. The information is gathered through the constant monitoring of blog sites, news media, social media and other beverage related sites for anything relevant to craft beer. KC Hop Talk is truly dedicated to craft beer fans of Kansas City, and is dedicated to deliver the most up-to-date information directly to the “Craft Beer” Community.</p>
     		</div>
         </div><!-- /.blog-main -->
-
-        
+       
       </div><!-- /.row -->
     </div>
 
+<?php
 
-    <footer class="footer" style="background-color:#AAA09D; text-align:center;">
-      <div class="container">
-        <p><?php CRDate2(); ?> </p>
-      </div>
-    </footer>
+  $pageDetails->page_footer();
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="./js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="./js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="./js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
+?>

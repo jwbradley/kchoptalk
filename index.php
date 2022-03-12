@@ -1,46 +1,45 @@
 <?php
-      include './php/HTFunctions.php';
-      include('./php/class.bufferapp.php' );
-      include('./php/header.php' );
+
+    ini_set("error_log", "./logs/BeerErrors.log");
+
+    // [root@uxtawdwiki01 bcp_stage]# gdb php
+    // run -d xdebug.auto_trace=ON -d xdebug.trace_output_dir=/var/log/httpd /apps/joomla/bcp_stage/batchconfig_loader.php
+
+    // Turn off all error reporting
+    // error_reporting(0);
+
+    // Report simple running errors
+    // error_reporting(E_ERROR | E_WARNING | E_PARSE);
+
+    // Reporting E_NOTICE can be good too (to report uninitialized
+    // variables or catch variable name misspellings ...)
+    // error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
+
+    // Report all errors except E_NOTICE
+    // error_reporting(E_ALL & ~E_NOTICE);
+
+    // Report all PHP errors (see changelog)
+    // error_reporting(E_ALL);
+
+    // Report all PHP errors
+    // error_reporting(-1);
+
+    // Same as error_reporting(E_ALL);
+    // ini_set('error_reporting', E_ALL);
+
+    include './php/HTFunctions.php';
+    include('./php/class.bufferapp.php' );
+    include('./php/header.php' );
+    include('./php/kc_class.php');
+
+    echo "\n</head>\n<body>\n";
+
+    $cur_page = '.' . str_replace('.php', '', strtolower(htmlspecialchars($_SERVER["PHP_SELF"])));
+    $beerNews = new kcbeerclass();
+    // $beerNews->menu_bar("Beer Nerd News Site", "Where Kansas City's Hop Heads Find Current Craft Beer News", $cur_page);
+    $beerNews->menu_bar("KC's Beer News Site", "Where Hop Heads Get Craft Beer News", $cur_page);
+
 ?>
-	
-  </head>
-
-  <body>
-
-<!-- Start Fixed navbar -->
- <nav id="LC-navbar" class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <div id="LC-navbar-header" class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#LC-navbar-collapse">
-                    <span class="sr-only"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-
-                <a id="LC-navbar-brand" class="navbar-brand" href="<?php echo '.'.htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                    <img style="background-color:#ffffff;" src="./Pics/KCHopTalkLogo-172x172.png" alt="KC Hop Talk Beer News">    
-                    <!-- <img src="./Pics/KCHopTalkLogo-172x172.jpg">     -->
-                </a>
-                <div class="navbar-name">KC Hop Talk</div>
-                <div class="navbar-page">Beer News for Beer Nerds</div>
-                <div class="navbar-page-tag">Where KC Hop Heads Find Current Craft Beer Information</div>
-                
-            </div>
-
-            <div id="LC-navbar-collapse" class="collapse navbar-collapse">
-                <ul id="LC-navbar-links" class="nav navbar-nav navbar-right">
-                    <li><a href="./index.php">News</a></li>
-                    <li><a href="./blog.php">Blog</a></li>
-                    <li><a href="./kcbreweries.php">Breweries</a></li>
-                    <li><a href="./calendar.php">Events</a></li>
-                    <li><a href="./about.php">About</a></li> 
-                    <!-- <li><a href="./contact.php">Contact Us</a></li> -->
-                </ul>
-            </div>
-        </div>
-    </nav> <!-- End Fixed navbar -->
 
     <div class="container" id="main">
 
@@ -50,101 +49,124 @@
 
         <?php
         echo "\n";
-        $buffer = new BufferPHP('1/e14fca3551b6db62983a5863a493294e');
+        $buffer = new BufferPHP('2/ebcb260331971a34d60620edfa2d59ebaa1a82fc58b76b7c0b53ac678c288706cc41fc341f9047408f147d98d2d4c708247f9a4e824492eccc76896d72cb8e77');
 
         $data = array('profile_ids' => array());
 
-        $ret = $buffer->get('/profiles/526d4a13e350edfd4e0001c9/updates/sent', $data);
-
+        $returnData = $buffer->get('/profiles/556f027e4fac11e854f04916/updates/sent', $data);  // LinkedIn account
+        // $returnData = $buffer->get('/profiles/526d4a13e350edfd4e0001c9/updates/sent', $data);  // Twitter account
+        // $returnData = $buffer->get('/profiles/57851cc5ff5e3b8a50842432/updates/sent', $data);  // Instagram account
+                                              
         $cur_day = '';
         $prv     = '';
 
         $postCounter = 0;
         $linkIgnore = array(); // Need to add logic to read in listing from json file. Maybe add a function call here.
 
-        if (is_array($ret) || is_object($ret))
-        {
-          foreach($ret as $key=>$row) 
-          {
-            // echo "\n<!-- this is the \$row details and the \$postCounter is {$postCounter} -- ";
-            // var_dump($row);
-            // echo "  -->\n";
-            if (is_array($row))
-            {
-              foreach($row as $key2=>$column)
-              {
-                foreach($column as $key3=>$value)
-                {
-                  if ($key3 == "statistics")
-                  {
-                    $outputKey[$postCounter]['rank'] =  ($value['retweets']*20) + ($value['reach']) + ($value['clicks']*15) + ($value['favorites']*10) + ($value['mentions']*5);
-                  }
-                  if ($key3 == "text")
-                  {
-                    $valu2 = str_replace('.@', '', $value);
+        if (is_array($returnData) || is_object($returnData)) {
+          foreach($returnData as $key=>$allLinkData) {
+            if (is_array($allLinkData)) {
+              foreach($allLinkData as $key2=>$theLink) {
+                // echo "\n<!-- this is the \$theLink details and the \$key2 is {$key2} -- ";
+                // var_dump($theLink);
+                // echo "  -->\n";
+                $descript = '';
+                $hrefLink = '';
+                $headline = '';
+                $hrefTitle = '';
+                $hrefDesc = '';
+                $outputKey[$postCounter]['rank'] =  ($theLink['statistics']['reshares']*20) + ($theLink['statistics']['clicks']*15) + ($theLink['statistics']['likes']*10) + ($theLink['statistics']['comments']*5);
+                if ((strrpos($theLink['text'], 'https://') > 0 ) ||  (strrpos($theLink['text'], 'http://') > 0 )) {
+                  $hrefLink    = htmlspecialchars( substr($theLink['text'], strrpos($theLink['text'], 'http'), strlen($theLink['text'])-strrpos($theLink['text'], 'http') ) ) ;
+                  $headline    = substr($theLink['text'], 0, strrpos($theLink['text'], 'http') );                  
+                  $hrefDesc    =  ($theLink['media']['title'] == '404' ? '' : $theLink['media']['description']);;
+                    
+                // } else if  (strrpos($theLink['text'], 'http://') > 0 ) {
+                //   $hrefLink    = htmlspecialchars( substr($theLink['text'], strrpos($theLink['text'], 'http://'),  strlen($theLink['text'])-strrpos($theLink['text'], 'http://' ) ) ) ;
+                //   $headline    = substr($theLink['text'], 0, strrpos($theLink['text'], 'http://' ) );
+                
+              
 
-                    if (strrpos($value, 'https://') > 0 ) {
-                      $hrefLink    = htmlspecialchars( substr($value, strrpos($value, 'https://'), strlen($value)-strrpos($value, 'https://') ) ) ;
-                      $headline    = substr($value, 0, strrpos($value, 'https://') );
-                      // $outputKey[$postCounter]['link'] = "<a href=\"".$hrefLink. "\"  target=\"_blank\"><strong>".substr($value, 0, strrpos($value, 'https://') )."</strong></a>";
-                    }
-                    else if (strrpos($value, 'http://') > 0 ) {
-                      $hrefLink    = htmlspecialchars( substr($value, strrpos($value, 'http://'),  strlen($value)-strrpos($value, 'http://' ) ) ) ;
-                      $headline    = substr($value, 0, strrpos($value, 'http://' ) );
-                      // $outputKey[$postCounter]['link'] = "<a href=\"".$hrefLink. "\"  target=\"_blank\"><strong>".substr($value, 0, strrpos($value, 'http://') )."</strong></a>";
-                    }
 
-                    if (!linkfilter($hrefLink)) {
-                      // $outputKey[$postCounter]['link'] = "<a href=\"".$hrefLink. "\"  target=\"_blank\"><strong>".$headline."</strong></a>";
-
-                      // $linkcoded = base64_encode(urlencode($hrefLink));
-                      // $TitleCoded = base64_encode(urlencode($headline));
-                      $linkcoded  = urlencode($hrefLink);
-                      $TitleCoded = urlencode($headline);
-                      
-                      $outputKey[$postCounter]['link'] = "<a href=\"./post.php?l=".$linkcoded."&t=".htmlspecialchars($TitleCoded)."\" target=\"_blank\"><strong>".$headline."</strong></a>";
-
-                    }
-
-                    // if (strrpos($value, 'https://') > 0 ) {
-                    //   $outputKey[$postCounter]['link'] = "<a href=\"".substr($value, strrpos($value, 'https://'), strlen($value)-strrpos($value, 'https://') ). "\"  target=\"_blank\"><strong>".substr($value, 0, strrpos($value, 'https://') )."</strong></a>";
-                    // }
-                    // else {
-                    //   $outputKey[$postCounter]['link'] = "<a href=\"".substr($value, strrpos($value, 'http://'), strlen($value)-strrpos($value, 'http://') ). "\"  target=\"_blank\"><strong>".substr($value, 0, strrpos($value, 'http://') )."</strong></a>";
-                    // }
-
-                  }
-                  // $outKey = array_unique($outputKey);
-
-                  if (($postCounter <= 30) && ($key3 == "text_formatted") && ($prv != $outputKey[$postCounter]['link']))
-                  // if ( ($postCounter < 30) && (!linkfilter($hrefLink)) )
-                  {
-                    echo "\t<div class=\"blog-post\">";
-                      echo $outputKey[$postCounter]['link'];
-                    echo "</div>\n";
-                    $prv = $outputKey[$postCounter]['link'];
-                    ++$postCounter;
-                  }
+                // if ((strrpos($theLink['text'], 'https://') != 0 ) || (strrpos($theLink['text'], 'http://') != 0 ) ) { 
+                //     // echo "\n<!-- if loop nest 2 -->\n ";
+                //     $hrefLink    =  htmlspecialchars( $theLink['media']["link"] ) ;
+                //     $PageTitle   =  $theLink['media']['title'];
+                //     $hrefDesc    =  $theLink['media']['description'];
+                //     $hrefPrev    =  $theLink['media']['preview'];
+                //     $hrefPSafe   =  $theLink['media']['preview_safe'];
+                //     $hrefExplnk  =  $theLink['media']['expanded_link'];
+                //     $hrefThumb   =  $theLink['media']['thumbnail'];
+                } else if ((strrpos($theLink['text'], 'https://') == 0 ) && (strrpos($theLink['text'], 'http://') == 0 ) ) { 
+                    $hrefLink    =  htmlspecialchars( $theLink['media']["link"] ) ;
+                    $headline    =  $theLink['text'];
+                    $hrefTitle   =  $theLink['media']['title'];
+                    $hrefDesc    =  ($theLink['media']['title'] == '404' ? '' : $theLink['media']['description']);;
+                    $hrefThumb   =  $theLink['media']['thumbnail'];
                 }
-                // ++$postCounter;
+
+                // if ((strrpos($theLink['text'], 'https://') != 0 ) || (strrpos($theLink['text'], 'http://') != 0 ) ) { 
+                //     // echo "\n<!-- if loop nest 2 -->\n ";
+                //     $hrefLink    = htmlspecialchars( $theLink['media']["link"] ) ;
+                //     $PageTitle   = $theLink['media']['title'];
+                //     $hrefDesc    = $theLink['media']['description'];
+                //     $hrefThumb   = $theLink['media']['thumbnail'];
+                // } else if ((strrpos($theLink['text'], 'https://') == 0 ) && (strrpos($theLink['text'], 'http://') == 0 ) ) { 
+                //     // echo "\n<!-- if loop nest 3 -->\n ";
+                //     $hrefLink    = htmlspecialchars( $theLink['media']["link"] ) ;
+                //     $PageTitle   = $theLink['text'];
+                //     $hrefTitle   = ($theLink['media']['title'] == '404' ? '' : $theLink['media']['title']);
+                //     $hrefDesc    = ($theLink['media']['title'] == '404' ? '' : $theLink['media']['description']);
+                //     $hrefThumb   = $theLink['media']['thumbnail'];
+                // } 
+
+                if (($beerNews->linkfilters($hrefLink) === false) && isset($hrefLink) && ($hrefLink != '') ) {
+                  /* Base64 Encoded -- Harder to read on the page.*/
+                  // $linkcoded = base64_encode(urlencode($hrefLink));
+                  // $TitleCoded = base64_encode(urlencode($headline));
+
+                  /* URL Encoded -- easier to read on the page.*/
+                  // $linkcoded  = urlencode($hrefLink);
+                  $linkcoded  = trim($hrefLink);
+                  $TitleCoded = urlencode($headline);
+                  
+                  $descript   = ( $hrefDesc == '' || strtolower($hrefDesc) == 'null' ? '' : "<br /><div style=\"font-size: small; padding-left: 10pt; \">".$hrefDesc."</div>" );
+                  // $outputKey[$postCounter]['link'] = "<a href=\"./post.php?l=".$linkcoded."&t=".htmlspecialchars($TitleCoded)."\" target=\"_blank\"><strong>".$headline."</strong></a>{$descript}";
+                  // $outputKey[$postCounter]['link'] = ((($linkcoded) && ($TitleCoded)) ? '' : "<a href=\"./post.php?l=".$linkcoded."&t=".htmlspecialchars($TitleCoded)."\" target=\"_blank\"><strong>".$headline."</strong></a>");
+                  $outputKey[$postCounter]['link'] = "<a href=\"./post.php?l=".$linkcoded."&t=".htmlspecialchars($TitleCoded)."\" target=\"_blank\"><strong>".$headline."</strong></a>";
+
+                }
+                
+                // if (($postCounter <= 35)  && ($prv != $outputKey[$postCounter]['link']) && ($prvdsc != $descript) && ($prvTtl != $TitleCoded))
+                if (($postCounter <= 35)  && ($prv != $outputKey[$postCounter]['link']) && (isset($outputKey[$postCounter]['link'])) )  {
+                  echo "\n\t\t\t<div class=\"blog-post\">\n\t\t\t\t";
+                    echo $outputKey[$postCounter]['link'].$descript;
+                  echo "\n\t\t\t</div>";
+                  $prv    = $outputKey[$postCounter]['link'];
+                  $prvdsc = $descript;
+                  $prvTtl = $TitleCoded;
+                  ++$postCounter;
+                }
               }
             }
           }
         }
         ?>
         </div><!-- /.blog-main -->
-
-<!--         <div id="advert-id" class="sidebar-module">
-            <a href="./fest/springfling.html"  id="fb"><img src="./fest/springfling/springfling-logo.jpg" alt="Spring Fling Beer Festival" align="left" style="padding-right:10px;" height="250" width="250" ></a>
-        </div>   -->
+        <div id="advert-id" class="sidebar-module">
+            <!-- <a href="./fest/springfling.html"  id="fb"><img src="./fest/springfling/springfling-logo.jpg" alt="Spring Fling Beer Festival" align="left" style="padding-right:10px;" height="250" width="250" ></a> -->
+            <!-- <a href="./fest/folt.php"  id="fb"><img src="./fest/folt/folt-logo.jpg" alt="Festival of the Lost Township" align="left" style="padding-right:10px;" height="250" width="250" ></a> -->
+            <!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="kchoptalk" data-color="#FFDD00" data-emoji="🍺" data-font="Cookie" data-text="Buy Me a Beer" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script> -->
+            <!-- <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="kchoptalk" data-description="Support me on Buy me a coffee!" data-message="Thanks for visiting us today. If you found any value in your visit, please don't hesitate to buy me a pint of beer." data-color="#79D6B5" data-position="Right" data-x_margin="18" data-y_margin="18"></script> -->
+        </div>  
         <div class="col-sm-4 col-md-4 blog-sidebar">
 
           <div class="sidebar-module sidebar-module-inset"  style="background-color:#ffffff;">
 
-            <div id="calendar-id" class="sidebar-module" style="background-color:#E9E9E9;">
+            <!-- <div id="calendar-id" class="sidebar-module" style="background-color:#E9E9E9;">
             <h3 id="calHeader">What's on Tap</h3>
                 <iframe src="./HTML/Cal2.html" style=" border-width:0 " width=100% height="300" frameborder="0" scrolling="no"></iframe>  
-            </div>          
+            </div>           -->
             
             <div class="sidebar-module" style="background-color:#F5F6CE;">
               <h3 id="popPost">Popular Posts</h3>
@@ -153,9 +175,9 @@
                     if (is_array($outputKey)) { rsort($outputKey); }
                     for($x=0;$x<10;$x++)
                     {
-                      echo "\t<div class=\"blog-post\">";
+                      echo "\n\t\t\t\t<div class=\"blog-post\">\n\t\t\t\t\t";
                         echo $outputKey[$x]['link'];
-                      echo "</div>\n";
+                      echo "\n\t\t\t\t</div>";
                     }
                 ?> 
               </ol>
@@ -169,20 +191,8 @@
     </div>
 
 
-    <footer class="footer" style="background-color:#AAA09D; text-align:center;">
-      <div class="container">
-        <p><?php CRDate2(); ?> </p>
-      </div>
-    </footer>
+<?php
+  
+  $beerNews->page_footer();
 
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="./js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="./js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="./js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
+?>
