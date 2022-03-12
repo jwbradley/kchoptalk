@@ -6,7 +6,7 @@
  *
  * @package	    kcbeerclass
  * @author		James Bradley (kchoptalk.com)
- * @copyright   If you find any of this useful. Go for it.
+ * @copyright   If you find any of this useful. You are more than welcome to use it for your project.
  * @link		https://kchoptalk.com
  * @since		Version 0.1 back in 2012
  * @filesource  
