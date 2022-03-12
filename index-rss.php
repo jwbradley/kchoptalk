@@ -1,5 +1,5 @@
 <?php
-			include './php/HTFunctions.php';
+			
 			include('./php/class.bufferapp.php' );
 			
 

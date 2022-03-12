@@ -1,7 +1,7 @@
 <?php
 
     ini_set("error_log", "./logs/BeerErrors.log");
-    include './php/HTFunctions.php';
+    
     include('./php/class.bufferapp.php' );
     include('./php/header.php' );
     include('./php/kc_class.php');

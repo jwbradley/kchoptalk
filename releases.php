@@ -1,14 +1,14 @@
 <?php
     ini_set("error_log", "./logs/BeerErrors.log");
-    include './php/HTFunctions.php';
+    
     include('./php/class.bufferapp.php' );
     include('./php/header.php' );
     include('./php/kc_class.php');
-
     echo "\n</head>\n<body>\n";
 
-    $cur_page = '.' . htmlspecialchars($_SERVER["PHP_SELF"]);
-    $pageDetails = new kcbeerclass($debugging='Y');
+    $debugger    =  ((!isset($_GET['debug']))  ? 'N'    : htmlspecialchars($_GET['debug']));
+    $cur_page    =  '.' . htmlspecialchars($_SERVER["PHP_SELF"]);
+    $pageDetails =  new kcbeerclass($debugger);
     $pageDetails->menu_bar("New Releases", "Recently released and/or coming soon beers.", $cur_page);
 
 ?>
@@ -21,7 +21,6 @@
 
         <?php
         echo "\n";
-        $debugger       =  ((!isset($_GET['debug']))  ? ''    : htmlspecialchars($_GET['debug']));
 
         $jsonOut        =  './json/beerTraderNewsArticles.json';
         $pageDetails->pagesOutput($jsonOut);
