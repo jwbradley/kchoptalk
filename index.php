@@ -49,13 +49,13 @@
 
         <?php
         echo "\n";
-        $buffer = new BufferPHP('2/ebcb260331971a34d60620edfa2d59ebaa1a82fc58b76b7c0b53ac678c288706cc41fc341f9047408f147d98d2d4c708247f9a4e824492eccc76896d72cb8e77');
+        $buffer = new BufferPHP(' ');
 
-        $data = array('profile_ids' => array());
+        $data = array('profile_ids' => array( { Buffer Key } ));
 
-        $returnData = $buffer->get('/profiles/556f027e4fac11e854f04916/updates/sent', $data);  // LinkedIn account
-        // $returnData = $buffer->get('/profiles/526d4a13e350edfd4e0001c9/updates/sent', $data);  // Twitter account
-        // $returnData = $buffer->get('/profiles/57851cc5ff5e3b8a50842432/updates/sent', $data);  // Instagram account
+        $returnData = $buffer->get('/profiles/ { LinkedIn account } /updates/sent', $data);  // LinkedIn account
+        // $returnData = $buffer->get('/profiles/ { Twitter account } /updates/sent', $data);  // Twitter account
+        // $returnData = $buffer->get('/profiles/ { Instagram account } /updates/sent', $data);  // Instagram account
                                               
         $cur_day = '';
         $prv     = '';
