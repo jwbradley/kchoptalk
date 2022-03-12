@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang = "en">
 <head>
 
 	<title>Kansas City Hop Talk - Beer News for Beer Nerds!</title>
@@ -7,16 +7,18 @@
 	<!-- <meta http-equiv="content-type" content="text/html; charset=WINDOWS-1252" > -->
 	<?php 
 		if (strpos($_SERVER["PHP_SELF"], 'index.php') !== false ) {
-			echo '<META HTTP-EQUIV="refresh" CONTENT="1800">'."\n";
+			// echo '<META HTTP-EQUIV="refresh" CONTENT="1800">'."\n";  /* A SEO Hints site said this wasn't a good thing to have on the page.  Added following javascript. */
+			echo "<script type=\"text/javascript\">\n\t\tfunction reload() {\n\t\t\tdocument.location.reload();\n\t\t}\n\n\t\tsetTimeout(reload, 240000);\n\t</script>\n";
 		}
 	?>
 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 	<meta name="author" content="James Bradley" >
-	<meta name="keywords" content="Kansas City Beer News, kc, Hop Talk, craft beer news, current beer news, beer industry news, latest beer news, beer, news, events">
+	<meta name="keywords" content="Kansas City, Beer News, craft beer, beer news, current beers, beer industry, news, latest beer news, beer, beer events, brewing, brewery, brews, brewers, kc, kcmo">
 	<meta name="distribution" content="GLOBAL">
 	<meta name="copyright" content="Copyright 2012-<?php echo date("Y"); ?> KC Hop Talk">
-	<meta name="description" content="KC Hop Talk delivers the most up-to-date information about beer news and beer events related to Craft Beer and Brewing in the Kansas City Community.">
+	<meta name="description" content="KC Hop Talk is dedicated to craft beer fans of Kansas City, by delivering up-to-date beer news directly to Kansas City's Craft Beer Enthusiasts.">
 
+    <meta name="p:domain_verify" content="6e055d9b6b3e5a32c8f19eddc3183078"/>
 	<meta name="bitly-verification" content="e56b7140b514"/>
 	<meta name="HandheldFriendly" content="True">
 	<meta name="MobileOptimized" content="320">
@@ -25,27 +27,28 @@
 	
 	<meta name="twitter:title" content="Kansas City Hop Talk - Beer News for Beer Nerds!">
 	<meta name="twitter:site" content="@kchoptalk">
-	<meta name="twitter:description" content="KC Hop Talk delivers the most up-to-date information about beer news and beer events related to Craft Beer and Brewing in the Kansas City Community.">
-	<meta name="twitter:image" content="http://kchoptalk.com/Pics/KCHopTalkLogo9.png">
+	<meta name="twitter:description" content="KC Hop Talk is dedicated to craft beer fans of Kansas City, by delivering up-to-date beer news directly to Kansas City's Craft Beer Enthusiasts.">
+	<meta name="twitter:image" content="https://kchoptalk.com/Pics/KCHopTalkLogo9.png">
 	<meta name="twitter:image:alt" content="Kansas City Hop Talk">
 	<meta name="twitter:card" content="summary">
 
 	<meta property="og:title" content="Kansas City Hop Talk - Beer News for Beer Nerds!"/>
-	<meta property="og:url" content="http://kchoptalk.com/" />
-	<meta property="og:image" content="http://kchoptalk.com/Pics/KCHopTalkLogo9.png"/>
+	<meta property="og:url" content="https://kchoptalk.com/" />
+	<meta property="og:image" content="https://kchoptalk.com/Pics/KCHopTalkLogo9.png"/>
 	<meta property="og:site_name" content="Kansas City Hop Talk"/>
-	<meta property="og:description" content="KC Hop Talk delivers the most up-to-date information about beer news and beer events related to Craft Beer and Brewing in the Kansas City Community."/>
+	<meta property="og:description" content="KC Hop Talk is dedicated to craft beer fans of Kansas City, by delivering up-to-date beer news directly to Kansas City's Craft Beer Enthusiasts."/>
 	<meta name="p:domain_verify" content="f3419de0fea78d4f0fd5784481472047"/>
-	<link rel="image_src" href="http://kchoptalk.com/Pics/KCHopTalkLogo9.png"/>
+	<link rel="image_src" href="https://kchoptalk.com/Pics/KCHopTalkLogo9.png"/>
 	
-	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://kchoptalk.com/Pics/KCHTLogo-144x144.png">
-	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="http://kchoptalk.com/Pics/KCHTLogo-114x114.png">
-	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="http://kchoptalk.com/Pics/KCHTLogo-72x72.png">
-	<link rel="apple-touch-icon-precomposed" href="http://kchoptalk.com/Pics/KCHTLogo-57x57.png">
-	<link rel="shortcut icon" href="http://kchoptalk.com/Pics/KCHopTalkLogo9.png">
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://kchoptalk.com/Pics/KCHTLogo-144x144.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://kchoptalk.com/Pics/KCHTLogo-114x114.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://kchoptalk.com/Pics/KCHTLogo-72x72.png">
+	<link rel="apple-touch-icon-precomposed" href="https://kchoptalk.com/Pics/KCHTLogo-57x57.png">
+	<link rel="shortcut icon" href="https://kchoptalk.com/Pics/KCHopTalkLogo9.png">
+	<link rel="icon" type="image/png" href="./favicon.ico">
 
 	<!-- Tile icon for Win8 (132x144 + tile color) -->
-	<meta name="msapplication-TileImage" content="http://kchoptalk.com/Pics/KCHTLogo-144x144.png">
+	<meta name="msapplication-TileImage" content="https://kchoptalk.com/Pics/KCHTLogo-144x144.png">
 	<meta name="msapplication-TileColor" content="#222222">
 
 
@@ -62,34 +65,14 @@
 	<!-- <link rel="stylesheet" type="text/css" href="./css/kchtstyle.css" /> -->
 	<!-- <link rel="stylesheet" type="text/css" href="./css/kcht-newlook.css" /> -->
 
-	<script type="text/javascript">
-	  var _gaq = _gaq || [];
-  		_gaq.push(['_setAccount', 'UA-37565453-1']);
-  		_gaq.push(['_trackPageview']);
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-37565453-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
 
-  	  (function() {
-      	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
+	  gtag('config', 'UA-37565453-1');
 	</script>
 
-	<!-- Start of Leadin Embed -->
-	  <!-- <script type="text/javascript" src="//js.leadin.com/js/v1/2360719.js" id="LeadinEmbed-2360719" crossorigin="use-credentials" async defer></script> -->
-	<!-- End of Leadin Embed -->
-	
-    <!-- [if lt IE 9]><script
-    src="http://html5shiv.googlecode.com/svn/trunk/html5.js"><
-    /script><![endif] -->
-
-
-
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="./js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="kchoptalk" data-description="Support me on Buy me a coffee!" data-message="Thank you for visiting our site today. We appreciate your support, and any amount will be used towards keeping the beer news flowing.  Cheers!" data-color="#79D6B5" data-emoji="🍺" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
