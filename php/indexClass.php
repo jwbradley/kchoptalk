@@ -4,9 +4,20 @@
 class beerIndexClass {
    
 	/**
-	 * Buffer REST API's.
+     * beerIndexClass v2.0
+	 * Buffer API's.
+	 * The Buffer API provides access to user's pending and sent updates, social media profiles, 
+	 * scheduled times and more.
 	 * 
+	 * As of October 14th, 2019, Buffer no longer supports the registration of new developer 
+	 * applications. Applications created prior to this date will retain access to the Buffer Publish API. 
 	 * 
+	 * @package	    beerIndexClass
+	 * @author		James Bradley (kchoptalk.com)
+	 * @copyright   If you find any of this useful. You are more than welcome to use it for your project.
+	 * @link		https://kchoptalk.com
+	 * @since		Version 0.1 back in 2012
+	 * @filesource  
 	 */
 
 

@@ -1,8 +1,11 @@
 <?php
 
 /**
- * kcbeerclass v1.1
- *
+ * kcbeerclass v2.1
+ * The Feedly API
+ * The purpose of the Feedly API is to empower individuals and businesses to streamline their 
+ * research and curation workflows as well as empower third-party developers to create 
+ * different/innovative reading experiences.
  *
  * @package	    kcbeerclass
  * @author		James Bradley (kchoptalk.com)
