@@ -8,6 +8,10 @@ class beerFeedClass {
    
 	/**
 	 * Feedly's REST API's.
+	 * The Feedly API
+	 * The purpose of the Feedly API is to empower individuals and businesses to streamline their 
+	 * research and curation workflows as well as empower third-party developers to create 
+	 * different/innovative reading experiences.
 	 * 
 	 * Connecting to the Developer site: https://developer.feedly.com
 	 * Feedly website manual access key resests: https://feedly.com/v3/auth/dev
