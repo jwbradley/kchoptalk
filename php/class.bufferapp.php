@@ -23,33 +23,31 @@ if (!function_exists('json_decode')) {
 class BufferPHP {
 	// You can change the options below if you wish
 	private $config = array(
-						'user_agent' => 'BufferPHP v0.1', // The user agent to send to the Buffer API
-						'connect_timeout' => 30, // Maximum time to wait (in seconds) before connect fails
-						'timeout' => 30, // Maximum time to wait (in seconds) before API doesnt respond
-						'verify_ssl_cert' => false // This is false by default because some servers have trouble verifing SSL certificates through cURL
-						);
-						
-	// You should only change the code below if you know what you're doing!
-	
-	/**
+				'user_agent' => 'BufferPHP v0.1', // The user agent to send to the Buffer API
+				'connect_timeout' => 30, // Maximum time to wait (in seconds) before connect fails
+				'timeout' => 30, // Maximum time to wait (in seconds) before API doesnt respond
+				'verify_ssl_cert' => false // This is false by default because some servers have trouble verifing SSL certificates through cURL
+				);
+							
+     /**
      * @var string Access token
      */
 	private $access_token = '';
 	
-	/**
+     /**
      * @var string Base URL for API 
      */
 	private $base_url = 'https://api.bufferapp.com/1/';
 	
-	/**
+     /**
      * @var array HTTP headers from last request
      */
 	public $http_header = array();
-	/**
+     /**
      * @var array Info about last cURL request
      */
 	public $http_info = array();
-	/**
+     /**
      * @var string The last URL used
      */
 	public $last_url = '';
@@ -152,11 +150,8 @@ class BufferPHP {
 		
 		curl_close ($ci);
 		
-		// echo "<!-- ";
-		// var_dump($response);
-		// echo "  -->";
 		return json_decode($response, true);
-		// return $response;
+		
 	}
 	
 	/**
