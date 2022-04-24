@@ -69,6 +69,9 @@
         $postCounter = 0;
         $linkIgnore = array(); // Need to add logic to read in listing from json file. Maybe add a function call here.
 
+        // echo "\n<!-- this is the \$theLink details and the \$key2 is {$key2} -- ";
+        // var_dump($returnData);
+        // echo "  -->\n";
         if (is_array($returnData) || is_object($returnData)) {
           foreach($returnData as $key=>$allLinkData) {
             if (is_array($allLinkData)) {
@@ -85,7 +88,11 @@
                 if ((strrpos($theLink['text'], 'https://') > 0 ) ||  (strrpos($theLink['text'], 'http://') > 0 )) {
                   $hrefLink    = htmlspecialchars( substr($theLink['text'], strrpos($theLink['text'], 'http'), strlen($theLink['text'])-strrpos($theLink['text'], 'http') ) ) ;
                   $headline    = substr($theLink['text'], 0, strrpos($theLink['text'], 'http') );                  
-                  $hrefDesc    =  ($theLink['media']['title'] == '404' ? '' : $theLink['media']['description']);;
+                  $hrefDesc    =  ($theLink['media']['title'] == '404' ? '' : $theLink['media']['description']);
+
+                  /* self blacklisted site */
+                  $hrefLink    =  (stripos($theLink['media']['title'], 'mybeerbuzz') === false ? (stripos($theLink['media']['expanded_link'], 'mybeerbuzz') === false ? $hrefLink : '') : '');
+                  
                     
                 // } else if  (strrpos($theLink['text'], 'http://') > 0 ) {
                 //   $hrefLink    = htmlspecialchars( substr($theLink['text'], strrpos($theLink['text'], 'http://'),  strlen($theLink['text'])-strrpos($theLink['text'], 'http://' ) ) ) ;
@@ -162,8 +169,7 @@
         <div id="advert-id" class="sidebar-module">
             <!-- <a href="./fest/springfling.html"  id="fb"><img src="./fest/springfling/springfling-logo.jpg" alt="Spring Fling Beer Festival" align="left" style="padding-right:10px;" height="250" width="250" ></a> -->
             <!-- <a href="./fest/folt.php"  id="fb"><img src="./fest/folt/folt-logo.jpg" alt="Festival of the Lost Township" align="left" style="padding-right:10px;" height="250" width="250" ></a> -->
-            <!-- <script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="kchoptalk" data-color="#FFDD00" data-emoji="🍺" data-font="Cookie" data-text="Buy Me a Beer" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script> -->
-            <!-- <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="kchoptalk" data-description="Support me on Buy me a coffee!" data-message="Thanks for visiting us today. If you found any value in your visit, please don't hesitate to buy me a pint of beer." data-color="#79D6B5" data-position="Right" data-x_margin="18" data-y_margin="18"></script> -->
+
         </div>  
         <div class="col-sm-4 col-md-4 blog-sidebar">
 

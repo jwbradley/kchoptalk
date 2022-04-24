@@ -30,7 +30,6 @@
     </div>
 
 <?php
-
   $pageDetails->page_footer();
 
 ?>
