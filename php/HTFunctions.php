@@ -11,7 +11,7 @@ function GetEmailLink($emailaddr) {
 
 function emailAddressEncode($in_email) {		
 		
-	echo htmlentities($in_email);
+	echo htmlentities($in_email, ENT_HTML5);
 
 }		
 
