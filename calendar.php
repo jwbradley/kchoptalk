@@ -1,6 +1,6 @@
 <?php
     ini_set("error_log", "./logs/BeerErrors.log");
-    
+    include './php/HTFunctions.php';
     include('./php/class.bufferapp.php' );
     include('./php/header.php' );
     include('./php/kc_class.php');
@@ -23,7 +23,7 @@
 	            <iframe src="./HTML/Cal1.html" style=" border-width:0 " width="992" height="650" frameborder="0" scrolling="no"></iframe>
                 <br/>
                 <b style="font-size:22px;">Don't see your event? <br>Send an email with details on your beer event to: 
-                <a style="text-decoration:none" href=" <?php emailAddressEncode('calendar@kchoptalk.com'); ?> ?subject=Kansas City Hop Talk Calendar Listing">&#99;&#97;&#108;&#101;&#110;&#100;&#97;&#114;&#64;&#107;&#99;&#104;&#111;&#112;&#116;&#97;&#108;&#107;&#46;&#99;&#111;&#109;</a>
+                <a style="text-decoration:none" href=" <?php emailAddressEncode('mailto:calendar@kchoptalk.com'); ?> ?subject=Kansas City Hop Talk Calendar Listing"> <?php emailAddressEncode('calendar@kchoptalk.com'); ?> </a>
                 </b>
     		</div>
         </div><!-- /.blog-main -->
