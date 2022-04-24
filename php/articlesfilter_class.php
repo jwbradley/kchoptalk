@@ -25,7 +25,7 @@ class articlesFilter {
 		$noKeeper = false;
         foreach ($this->filter_keys as $key => $value) {
         	if(stripos($i['title'], $value) !== false) { 
-        		$noKeeper = true;
+                $noKeeper = true;
         	}
         }
 		return $noKeeper;
@@ -38,10 +38,8 @@ class articlesFilter {
          * False -- Removes it from the results, thus not getting marked as READ in the feedly feeds. 
          */
         $noKeeper = true;
-		// echo "<!-- Searching Article:  ".$i['title']." -->\n"; 
-        foreach ($this->filter_keys as $key => $value) {
+		foreach ($this->filter_keys as $key => $value) {
 			if(stripos($i['title'], $value) !== false) {
-				// echo "<!-- Found Beer Term = ".$value." -->\n"; 
 				$noKeeper = false;
         	}
         }
@@ -57,13 +55,12 @@ class articlesFilter {
          * False -- Means it is NOT a dupe. It'll be filtered out of the result set, and it will NOT be marked as READ. 
          */
 		$isDupe = false;
-		$replaceChars = array('-', '|', '—', '…', '...', '&', ' ');
+		$replaceChars = array('-', '|', ':', ';', '—', '…', '...', ' ', '/', 'brewbound.com', '&');
 		foreach ($this->filter_keys as $key => $value) {
 			if ($i['id'] !=  $value['id']) {
 	        	if  (str_replace($replaceChars, '', strtolower($i['title'])) === str_replace($replaceChars, '', strtolower($value['title']))) { 
 		    		$isDupe = true;
-					echo "<!-- Is Dupe: ".$value['title']." -->\n"; 
-					echo "<!-- Setting \$isDupe as: "; var_export($isDupe); echo " -->\n"; 
+					
 	        	} 
 	        }
         }
