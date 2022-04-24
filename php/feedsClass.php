@@ -1,8 +1,8 @@
 <?php
 
 use myfeeds\articlesFilter as articlesFilter;
-
 require './articlesfilter_class.php';
+ini_set("error_log", "../logs/BeerErrors.log");
 
 class beerFeedClass {
    
@@ -192,10 +192,11 @@ class beerFeedClass {
 
 		$scrub['title'] = '';
 		$allDUPES       = (array_filter($this->categoryArticles['items'], array(new articlesFilter($this->categoryArticles['items']), 'findAllDupeArticles')));
+		$replaceChars   = articlesFilter::replacables();
 		if(is_array($allDUPES) && (count($allDUPES)>0)) {
 	    	echo ($this->debugger ? "<!-- [EXECUTE] => Dupes Scrubbing -->\n" : '');
 		    array_multisort( array_column($allDUPES, "title"), SORT_ASC, $allDUPES );
-	    	$replaceChars = array('-', '|', ':', ';', '—', '…', '...', ' ', '/', 'brewbound.com', '&');
+	    	
 			foreach ($allDUPES as $key => $value) {
 				// The following logic will keep the first article in the dupes list and set the rest to be marked as read.
 	    		if  (str_replace($replaceChars, '', strtolower($value['title'])) === str_replace($replaceChars, '', strtolower($scrub['title']))) { 
@@ -224,6 +225,7 @@ class beerFeedClass {
 		 */
 	    echo ($this->debugger ? "<!-- [EXECUTE] => bulkTagFeedArticles -->\n" : '');
 		$this->getCategoriesArticles();
+		// var_dump(array_filter($this->categoryArticles['items'], array(new articlesFilter($tagThese), 'bulkTagArticles')));
 		$this->getArticleIDs(array_filter($this->categoryArticles['items'], array(new articlesFilter($tagThese), 'bulkTagArticles')));
 		$this->feedTagger($tag, 'Y');
 	}
@@ -247,7 +249,8 @@ class beerFeedClass {
 	     * This method gets all of the article ID's for the feedly POST output. 
 	     */	
 	    echo ($this->debugger ? "\n<!-- [EXECUTE] => getArticleIDs -->\n" : '');
-	    if(is_array($articlesList)) {
+	    // var_dump($articlesList);
+		if(is_array($articlesList)) {
 			foreach($articlesList as $feed=>$streamdata)  {
 				echo ($this->debugger !=  '' ? "\n<!-- Article Title: \"{$streamdata['title']}\" -->\n"         : '');
 				echo ($this->debugger !=  '' ? "<!-- Article ID:    \"{$streamdata['id']}\" -->\n"         : '');
@@ -284,7 +287,11 @@ class beerFeedClass {
 				}
 			}
 		}
-		
+		if($this->debugger) {
+		  echo "<!-- This is the results from feedly ...  ";
+		  var_dump($outputData);
+		  echo " -->";
+		}
 		return $outputData;
 	}
 
