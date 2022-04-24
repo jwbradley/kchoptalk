@@ -7,8 +7,9 @@
 
     echo "\n</head>\n<body>\n";
 
-    $cur_page = '.' . htmlspecialchars($_SERVER["PHP_SELF"]);
+    $cur_page    = '.' . htmlspecialchars($_SERVER["PHP_SELF"]);
     $pageDetails = new kcbeerclass();
+    $my_email    = 'calendar@kchoptalk.com';
     $pageDetails->menu_bar("KC Beer Events", "", $cur_page);
 
 ?>
@@ -23,7 +24,7 @@
 	            <iframe src="./HTML/Cal1.html" style=" border-width:0 " width="992" height="650" frameborder="0" scrolling="no"></iframe>
                 <br/>
                 <b style="font-size:22px;">Don't see your event? <br>Send an email with details on your beer event to: 
-                <a style="text-decoration:none" href=" <?php emailAddressEncode('mailto:calendar@kchoptalk.com'); ?> ?subject=Kansas City Hop Talk Calendar Listing"> <?php emailAddressEncode('calendar@kchoptalk.com'); ?> </a>
+                <a style="text-decoration:none" href=" <?php emailAddressEncode('mailto:'.$my_email); ?> ?subject=Kansas City Hop Talk Calendar Listing"> <?php emailAddressEncode($my_email); ?> </a>
                 </b>
     		</div>
         </div><!-- /.blog-main -->
