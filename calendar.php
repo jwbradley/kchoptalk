@@ -24,7 +24,7 @@
 	            <iframe src="./HTML/Cal1.html" style=" border-width:0 " width="992" height="650" frameborder="0" scrolling="no"></iframe>
                 <br/>
                 <b style="font-size:22px;">Don't see your event? <br>Send an email with details on your beer event to: 
-                <a style="text-decoration:none" href=" <?php emailAddressEncode('mailto:'.$my_email); ?> ?subject=Kansas City Hop Talk Calendar Listing"> <?php emailAddressEncode($my_email); ?> </a>
+                <a style="text-decoration:none" href="<?php emailAddressEncode('mailto:'.$my_email); ?>?subject=Kansas City Hop Talk Calendar Listing"><?php emailAddressEncode($my_email); ?> </a>
                 </b>
     		</div>
         </div><!-- /.blog-main -->
