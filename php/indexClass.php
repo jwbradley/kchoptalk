@@ -20,7 +20,6 @@ class beerIndexClass {
 	 * @filesource  
 	 */
 
-
 	private $buffrTokenStore = __dir__  . '/../../.kcb';
 
 	public function __construct($debugFlag) {

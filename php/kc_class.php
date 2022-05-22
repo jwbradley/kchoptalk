@@ -2,7 +2,10 @@
 
 /**
  * kcbeerclass v2.1
- * This class is used to keep the look of each page on KCHopTalk looking the same. 
+ * The Feedly API
+ * The purpose of the Feedly API is to empower individuals and businesses to streamline their 
+ * research and curation workflows as well as empower third-party developers to create 
+ * different/innovative reading experiences.
  *
  * @package	    kcbeerclass
  * @author		James Bradley (kchoptalk.com)
@@ -14,6 +17,9 @@
 
 class kcbeerclass { 
 
+	const   email         =  'contentmanager@kchoptalk.com';
+	const   socialAccount = "KCHopTalk";
+
 	function __construct($bugs='') {
 		$this->debug = $bugs;
 		$this->twitterLink();
@@ -23,6 +29,7 @@ class kcbeerclass {
 		$this->untappdLink();
 		$this->ratebeerLink();
 		$this->redditLink();
+		$this->emailReachOut();
 		
 	}
 
@@ -71,45 +78,51 @@ class kcbeerclass {
 
 
 	function twitterLink() {
-		$this->socialLinks['twitter']['url'] = "https://twitter.com/KCHopTalk";
-		$this->socialLinks['twitter']['acc'] = "KCHopTalk";
+		$this->socialLinks['twitter']['url'] = "https://twitter.com/".self::socialAccount;
+		$this->socialLinks['twitter']['acc'] = self::socialAccount;
 		$this->socialLinks['twitter']['ico'] = "./Pics/twitter_32.png";
 	}
 
 	function facebookLink() {
-		$this->socialLinks['facebook']['url'] = "https://www.facebook.com/KCHopTalk";
-		$this->socialLinks['facebook']['acc'] = "KCHopTalk";
+		$this->socialLinks['facebook']['url'] = "https://www.facebook.com/".self::socialAccount;
+		$this->socialLinks['facebook']['acc'] = self::socialAccount;
 		$this->socialLinks['facebook']['ico'] = "./Pics/f_logo.png";
 	}
 
 	function instagramLink() {
-		$this->socialLinks['instagram']['url'] = "https://instagram.com/kchoptalk?ref=badge";
-		$this->socialLinks['instagram']['acc'] = "KCHopTalk";
+		$this->socialLinks['instagram']['url'] = "https://instagram.com/".self::socialAccount."?ref=badge";
+		$this->socialLinks['instagram']['acc'] = self::socialAccount; 
 		$this->socialLinks['instagram']['ico'] = "./Pics/ig-badge-48.png";
 	}
 
 	function pinterestLink() {
-		$this->socialLinks['pinterest']['url'] = "https://www.pinterest.com/kchoptalk/";
-		$this->socialLinks['pinterest']['acc'] = "KCHopTalk";
+		$this->socialLinks['pinterest']['url'] = "https://www.pinterest.com/".self::socialAccount;
+		$this->socialLinks['pinterest']['acc'] = self::socialAccount;
 		$this->socialLinks['pinterest']['ico'] = "./Pics/pinterest.png";
 	}
 
 	function untappdLink() {
-		$this->socialLinks['untappd']['url'] = "https://untappd.com/user/KCHopTalk";
-		$this->socialLinks['untappd']['acc'] = "KCHopTalk";
+		$this->socialLinks['untappd']['url'] = "https://untappd.com/user/".self::socialAccount;
+		$this->socialLinks['untappd']['acc'] = self::socialAccount;
 		$this->socialLinks['untappd']['ico'] = "./Pics/untappd.jpeg";
 	}
 
 	function ratebeerLink() {
 		$this->socialLinks['ratebeer']['url'] = "https://www.ratebeer.com/user/276207/";
-		$this->socialLinks['ratebeer']['acc'] = "KCHopTalk";
+		$this->socialLinks['ratebeer']['acc'] = self::socialAccount;
 		$this->socialLinks['ratebeer']['ico'] = "./Pics/rate+beer.png";
 	}
 
 	function redditLink() {
-		$this->socialLinks['reddit']['url'] = "https://www.reddit.com/r/KCHopTalk/";
-		$this->socialLinks['reddit']['acc'] = "KCHopTalk";
+		$this->socialLinks['reddit']['url'] = "https://www.reddit.com/r/".self::socialAccount;
+		$this->socialLinks['reddit']['acc'] = self::socialAccount;
 		$this->socialLinks['reddit']['ico'] = "./Pics/reddit.png";
+	}
+
+	function emailReachOut() {
+		$this->socialLinks['email']['url'] = htmlentities("mailto:".self::email, ENT_HTML5);
+		$this->socialLinks['email']['acc'] = htmlentities(self::email, ENT_HTML5);
+		$this->socialLinks['email']['ico'] = "./Pics/email.png";
 	}
 
 	function page_footer() {
