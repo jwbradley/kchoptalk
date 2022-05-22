@@ -192,7 +192,7 @@ class beerFeedClass {
 
 		$scrub['title'] = '';
 		$allDUPES       = (array_filter($this->categoryArticles['items'], array(new articlesFilter($this->categoryArticles['items']), 'findAllDupeArticles')));
-		$replaceChars   = articlesFilter::replacables();
+	    $replaceChars   = articlesFilter::replacables();
 		if(is_array($allDUPES) && (count($allDUPES)>0)) {
 	    	echo ($this->debugger ? "<!-- [EXECUTE] => Dupes Scrubbing -->\n" : '');
 		    array_multisort( array_column($allDUPES, "title"), SORT_ASC, $allDUPES );
@@ -254,6 +254,7 @@ class beerFeedClass {
 			foreach($articlesList as $feed=>$streamdata)  {
 				echo ($this->debugger !=  '' ? "\n<!-- Article Title: \"{$streamdata['title']}\" -->\n"         : '');
 				echo ($this->debugger !=  '' ? "<!-- Article ID:    \"{$streamdata['id']}\" -->\n"         : '');
+				// echo ($this->debugger !=  '' ? "<!-- Article ID:    \"".(!$streamdata['canonicalUrl'] ? $streamdata['alternate'] : $streamdata['canonicalUrl'])"\" -->\n"         : '');
 				$this->markReadList   .=  (strlen($this->markReadList   )>0  ? ",".'"'.$streamdata['id'].'"'    : '"'.$streamdata['id'].'"'    ) ;
 				$this->tagList        .=  (strlen($this->tagList)>0  ? ','.urlencode($streamdata['id']) : urlencode($streamdata['id']) ) ;
 			}

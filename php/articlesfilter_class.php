@@ -7,15 +7,11 @@ ini_set("error_log", "../logs/BeerErrors.log");
 class articlesFilter {
     private $servers      =  array();
     private $filter_keys  =  null;
-    const   replaceChars  =  array('-', '|', ':', ';', '—', '…', '...', ' ', '/', 'brewbound.com', '&');
+    const   replaceChars  =  array('-', '|', ':', ';', '—', '…', '...', ' ', '/', 'brewbound', '.com', '&');
 
     function __construct($filter_keys) {
     	echo "\n<!-- [INSTANCIATE] => articlesFilter Class -->\n";
-	    if (is_array($filter_keys)) {
-            $this->filter_keys = $filter_keys;
-        } else {
-        	$this->filter_keys = array($filter_keys);
-        }
+        $this->filter_keys  =  (is_array($filter_keys) ? $filter_keys : array($filter_keys) );
     }
 
     public static function replacables()
@@ -68,13 +64,31 @@ class articlesFilter {
          */
 		$isDupe = false;
 		
-		foreach ($this->filter_keys as $key => $value) {
+        foreach ($this->filter_keys as $key => $value) {
 			if ($i['id'] !=  $value['id']) {
-	        	if  (str_replace($replaceChars, '', strtolower($i['title'])) === str_replace(self::replaceChars, '', strtolower($value['title']))) { 
+            
+                if  (str_replace(self::replaceChars, '', strtolower($i['title'])) === str_replace(self::replaceChars, '', strtolower($value['title']))) { 
 		    		$isDupe = true;
-					echo "<!-- Is Dupe: ".$value['title']." -->\n"; 
-					echo "<!-- Setting \$isDupe as: "; var_export($isDupe); echo " -->\n"; 
-	        	} 
+					echo "<!-- Is Dupe:                     ".$value['title']." -->\n"; 
+					echo "<!-- Setting \$isDupe as:          "; var_export($isDupe); echo " -->\n"; 
+	        	}  elseif (stripos($i['title'], ' - ') == true) {
+                    /* Some of the feedly duped articles only have different text after the dash separator, and I want to exclude these articles, too. */
+                    if ( substr($i['title'], 0, stripos($i['title'], ' - ')) == substr($value['title'], 0, stripos($i['title'], ' - ')) ) {
+                        $isDupe = true;
+                        echo "<!-- \$value is a DASH Dupe:       ".$value['title']." -->\n"; 
+                        echo "<!-- Setting \$isDupe as:          "; var_export($isDupe); echo " -->\n"; 
+                    } 
+
+                } elseif (stripos($i['title'], ' | ')  == true) {
+                    /* Some of the feedly duped articles only have different text after the vertical bar separator, and I want to exclude these articles, too. */
+                    if ( substr($i['title'], 0, stripos($i['title'], ' | ')) == substr($value['title'], 0, stripos($i['title'], ' | ')) ) {
+                        $isDupe = true;
+                        echo "<!-- \$value is vertical bar Dupe: ".$value['title']." -->\n"; 
+                        echo "<!-- Setting \$isDupe as:          "; var_export($isDupe); echo " -->\n"; 
+                    }
+
+                }
+
 	        }
         }
 		return $isDupe;
