@@ -1,7 +1,7 @@
 <?php
 
     ini_set("error_log", "./logs/BeerErrors.log");
-   
+
     include('./php/class.bufferapp.php' );
     include('./php/header.php' );
     include('./php/kc_class.php');
@@ -32,6 +32,8 @@
         $data = array('profile_ids' => array());
 
         $returnData = $buffer->get('/profiles/'. $index->buffer_linkd .'/updates/sent', $data);  // LinkedIn account
+        // $returnData = $buffer->get('/profiles/'. $index->buffer_twitt .'/updates/sent', $data);  // Twitter account
+        // $returnData = $buffer->get('/profiles/'. $index->buffer_insta .'/updates/sent', $data);  // Instagram account
                                               
         $cur_day = '';
         $prv     = '';
@@ -43,7 +45,7 @@
           foreach($returnData as $key=>$allLinkData) {
             if (is_array($allLinkData)) {
               foreach($allLinkData as $key2=>$theLink) {
-                
+
                 $descript = '';
                 $hrefLink = '';
                 $headline = '';
@@ -55,9 +57,9 @@
                   $headline    = substr($theLink['text'], 0, strrpos($theLink['text'], 'http') );                  
                   $hrefDesc    =  ($theLink['media']['title'] == '404' ? '' : $theLink['media']['description']);
 
-                  /* 1st blacklisted site */
+                  /* blacklisted site */
                   $hrefLink    =  (stripos($theLink['media']['title'], 'mybeerbuzz') === false ? (stripos($theLink['media']['expanded_link'], 'mybeerbuzz') === false ? $hrefLink : '') : '');
-              
+                  
                 } else if ((strrpos($theLink['text'], 'https://') == 0 ) && (strrpos($theLink['text'], 'http://') == 0 ) ) { 
                     $hrefLink    =  htmlspecialchars( $theLink['media']["link"] ) ;
                     $headline    =  $theLink['text'];
@@ -66,10 +68,7 @@
                     $hrefThumb   =  $theLink['media']['thumbnail'];
                 }
 
-              
-
                 if (($beerNews->linkfilters($hrefLink) === false) && isset($hrefLink) && ($hrefLink != '') ) {
-                  
                   /* URL Encoded -- easier to read on the page.*/
                   $linkcoded  = trim($hrefLink);
                   $TitleCoded = urlencode($headline);
@@ -95,12 +94,18 @@
         ?>
         </div><!-- /.blog-main -->
         <div id="advert-id" class="sidebar-module">
+            <!-- <a href="./fest/springfling.html"  id="fb"><img src="./fest/springfling/springfling-logo.jpg" alt="Spring Fling Beer Festival" align="left" style="padding-right:10px;" height="250" width="250" ></a> -->
+            <!-- <a href="./fest/folt.php"  id="fb"><img src="./fest/folt/folt-logo.jpg" alt="Festival of the Lost Township" align="left" style="padding-right:10px;" height="250" width="250" ></a> -->
 
         </div>  
         <div class="col-sm-4 col-md-4 blog-sidebar">
 
           <div class="sidebar-module sidebar-module-inset"  style="background-color:#ffffff;">
 
+            <!-- <div id="calendar-id" class="sidebar-module" style="background-color:#E9E9E9;">
+            <h3 id="calHeader">What's on Tap</h3>
+                <iframe src="./HTML/Cal2.html" style=" border-width:0 " width=100% height="300" frameborder="0" scrolling="no"></iframe>  
+            </div>           -->
             
             <div class="sidebar-module" style="background-color:#F5F6CE;">
               <h3 id="popPost">Popular Posts</h3>
@@ -116,8 +121,6 @@
                 ?> 
               </ol>
             </div>
-
-          
 
         </div><!-- /.sidebar-module sidebar-module-inset -->
         </div><!-- /.blog-sidebar -->

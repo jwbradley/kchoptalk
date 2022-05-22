@@ -22,7 +22,10 @@
         <div class="col-xs-12 " >
             <div id="about-kcht" align="left">
 	            <div hidden><h1>About KCHOPTALK</h1></div>
-                <p style="font-size: 18px;">For the past <? echo trim($f->format($SiteAge->y)); ?> years Kansas City Hop Talk has been a popular content curation site intent on keeping local beer enthusiasts informed about craft beer. The information is gathered through the constant monitoring of blog sites, news media, social media and other beverage related sites for anything relevant to craft beer. KC Hop Talk is truly dedicated to craft beer fans of Kansas City, and is dedicated to deliver the most up-to-date information directly to the “Craft Beer” Community.</p>
+                <p style="font-size: 18px;">For the past <? echo trim($f->format($SiteAge->y)); ?> years Kansas City Hop Talk has been a popular content curation site intent on keeping local beer enthusiasts informed about craft beer. The information is gathered through the constant monitoring of blog sites, news media, social media and other beverage related sites for anything relevant to craft beer.</p>
+                <p style="font-size: 18px;">It’s the site one builds when they have a great passion for their favorite beverage, and they want to share content with others online. Since the beginning, it’s my intent to make it easy for someone to find content related to beer and beer brewing.</p>
+                <p style="font-size: 18px;">KC Hop Talk will always be dedicated to craft beer fans of Kansas City, and this site will deliver the most up-to-date information directly to the “Craft Beer” Community.</p>
+                <p style="font-size: 18px;"></p>
     		</div>
         </div><!-- /.blog-main -->
        
