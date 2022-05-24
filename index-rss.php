@@ -11,9 +11,7 @@ echo "\t<title>KC Hop Talk</title>\n";
 echo "\t<link>http://kchoptalk.com</link>\n";
 echo "\t<description>KC Hop Talk is Beer News for Beer Nerds. Current Craft Beer News for Kansas City Hop Heads seeking information pertaining to Beer.</description>\n";
 
-$debugger     =  ((!isset($_GET['debug']))  ? '' : htmlspecialchars($_GET['debug']));
-
-$index        =  new beerIndexClass($debugger);
+$index        =  new beerIndexClass();
 
 $buffer       =  new BufferPHP($index->buffer_id);
 $data         =  array('profile_ids' => array());
