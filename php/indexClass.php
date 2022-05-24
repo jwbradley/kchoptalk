@@ -22,7 +22,7 @@ class beerIndexClass {
 
 	private $buffrTokenStore = __dir__  . '/../../.kcb';
 
-	public function __construct($debugFlag) {
+	public function __construct($debugFlag='N') {
 		$this->debugger = $debugFlag;
 		$this->loadTokens();
 	}
