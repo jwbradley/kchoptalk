@@ -1,8 +1,7 @@
 <?php
 			
 include('./php/class.bufferapp.php' );
-			
-
+		
 echo "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
 echo "<rss version=\"2.0\">\n";
 
@@ -12,7 +11,6 @@ echo "\t<link>http://kchoptalk.com</link>\n";
 echo "\t<description>KC Hop Talk is Beer News for Beer Nerds. Current Craft Beer News for Kansas City Hop Heads seeking information pertaining to Beer.</description>\n";
 
 $debugger     =  ((!isset($_GET['debug']))  ? ''    : htmlspecialchars($_GET['debug']));
-
 $buffer       =  new BufferPHP('');
 $data         =  array('profile_ids' => array());
 $ret          =  $buffer->get('/profiles/556f027e4fac11e854f04916/updates/sent', $data);
