@@ -25,9 +25,9 @@ class beerFeedClass {
 		$this->readToken();
 	}
 
-	public function jsonOutput ($outputFile, $outputData, $json_type='Y')  {
+	public function jsonOutput ($outputFile, $outputData, $encode_json='Y')  {
 		/* Send ARRAY Values to a .json file for quick access. */
-		$outArray = ($json_type=='Y' ? json_encode($outputData) : $outputData);
+		$outArray = ($encode_json=='Y' ? json_encode($outputData) : $outputData);
 		$fp2 = fopen($outputFile, 'w');
 		fwrite($fp2, $outArray);
 		fclose($fp2);
@@ -191,7 +191,7 @@ class beerFeedClass {
 	    echo ($this->debugger ? "<!-- [EXECUTE] => Filter Duplicate Articles -->\n" : '');
 
 		$scrub['title'] = '';
-		$allDUPES       = (array_filter($this->categoryArticles['items'], array(new articlesFilter($this->categoryArticles['items']), 'findAllDupeArticles')));
+		$allDUPES       = array_filter($this->categoryArticles['items'], array(new articlesFilter($this->categoryArticles['items']), 'findAllDupeArticles'));
 	    $replaceChars   = articlesFilter::replacables();
 		if(is_array($allDUPES) && (count($allDUPES)>0)) {
 	    	echo ($this->debugger ? "<!-- [EXECUTE] => Dupes Scrubbing -->\n" : '');
