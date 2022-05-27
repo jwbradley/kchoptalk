@@ -9,7 +9,7 @@
 
     echo "\n</head>\n<body>\n";
 
-    $debugger  =  ((!isset($_GET['debug']))  ? ''    : htmlspecialchars($_GET['debug']));
+    $debugger  =  ((!isset($_GET['debug'])) ? '' : (htmlspecialchars($_GET['debug']) == 'Y' ? 'Y' : 'N'));
     $cur_page  =  '.' . str_replace('.php', '', strtolower(htmlspecialchars($_SERVER["PHP_SELF"])));
     $beerNews  =  new kcbeerclass();
     $index     =  new beerIndexClass($debugger);
