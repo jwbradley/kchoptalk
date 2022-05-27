@@ -60,9 +60,9 @@ class beerFeedClass {
         return "https://cloud.feedly.com";
     }
 
-	function feedlyGetSearch ($searchStream, $feedDays=31) {
+	function feedlyGetSearch ($searchStream, $feedDays=31, $readonly='true', $counter=200) {
 		echo ($this->debugger ? "\n<!-- [EXECUTE] => feedlyGetSearch -->" : '');
-		return $this->getApiBaseUrl() . "/v3/streams/contents?streamId=".urlencode("feed/".$searchStream)."&unreadOnly=true&count=200&newerThan=".(time() - ($feedDays*24*60*60).'.0000');	
+		return $this->getApiBaseUrl() . "/v3/streams/contents?streamId=".urlencode("feed/".$searchStream)."&unreadOnly=".$readonly."&count=".$counter."&newerThan=".(time() - ($feedDays*24*60*60).'.0000');	
 	}
 	
 	function feedlyGetStreamContents () {
