@@ -7,7 +7,7 @@ ini_set("error_log", "../logs/BeerErrors.log");
 class articlesFilter {
     private $servers      =  array();
     private $filter_keys  =  null;
-    const   replaceChars  =  array('-', '|', ':', ';', '—', '…', '...', ' ', '/', 'brewbound', '.com', '&');
+    const   replaceChars  =  array('-', '|', ':', ';', '—', '…', '...', ' ', '/', 'brewbound', '.com', '&', '\u2013');
 
     function __construct($filter_keys) {
     	echo "\n<!-- [INSTANCIATE] => articlesFilter Class -->\n";

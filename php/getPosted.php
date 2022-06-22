@@ -6,7 +6,7 @@ require './feedsClass.php';
 
 $debugger     =  ((!isset($_GET['debug']))  ? ''    : htmlspecialchars($_GET['debug']));
 
-$jsonOut      =  '/home/jambra49/kchoptalk.com/json/rss.json';
+$jsonOut      =  beerFeedClass::PostedArticles;
 $beerFeeds    =  'http://kchoptalk.com/index-rss.php';
 $feedDays     =  31;
 $readOnly     =  'false';

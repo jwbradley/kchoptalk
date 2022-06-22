@@ -7,7 +7,7 @@ require './feedsClass.php';
 $debugger    =  ((!isset($_GET['debug']))  ? ''    : htmlspecialchars($_GET['debug']));
 $start       =  new beerFeedClass('', $debugger);
 
-$jsonOut     =  '/home/jambra49/kchoptalk.com/json/beerRecipes.json';
+$jsonOut     =  beerFeedClass::beerRecipeTags;
 $feedTag     =  '/tag/Beer Recipes'; 
 $feedCount   =  200;
 $feedDays    =  60;
