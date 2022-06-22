@@ -17,6 +17,14 @@ class beerFeedClass {
 
 	private $TokenStorage       = __dir__  . '/../../.kct';
 	private $RefreshTokenStore  = __dir__  . '/../../.kcr';
+	const   PostedArticles      = __dir__  . '/../json/rss.json';
+	const   beerHowToTags       = __dir__  . '/../json/beerhowtos.json';
+	const   beerCookTags        = __dir__  . '/../json/cookswithbeer.json';
+	const   beerJobTags         = __dir__  . '/../json/beerjobs.json';
+	const   beerRecipeTags      = __dir__  . '/../json/beerRecipes.json';
+	const   beerTraders         = __dir__  . '/../json/beerTraderNewsArticles.json';
+	const   beerReviews         = __dir__  . '/../json/beerReviewArticles.json';
+
 
 	public function __construct($feeds, $debugFlag) {
 		// $this->feeds    = (is_array($feeds) ? $feeds : );
@@ -171,6 +179,17 @@ class beerFeedClass {
 		curl_close($this->cat_url);	
 	}
 
+	function getPostedArticlesList() {
+		/**
+		 *  Get all of the articles from a feedly category.
+		 */
+	    echo ($this->debugger ? "<!-- [EXECUTE] => getPostedArticlesList -->\n" : '');
+		$fileDate     =  date ("Y-m-d", filemtime($jsonoutDay));
+		$fDteTme      =  date ("F d, Y, H:i:s", filemtime($jsonoutDay));
+		$str          =  file_get_contents(self::PostedArticles);
+		$this->Posted =  json_decode($str, true);      // decode the .json into an associative array
+	}
+
 	function feedTagger($tag, $tagThem='Y') {
 	    /**
 	     * Makes calls to the feedly API's to Mark feedly articles as READ and set tags in feedly.
@@ -189,6 +208,30 @@ class beerFeedClass {
 		 *  Looks for duplicate articles
 		 */
 	    echo ($this->debugger ? "<!-- [EXECUTE] => Filter Duplicate Articles -->\n" : '');
+
+		$scrub['title'] = '';
+		$allDUPES       = array_filter($this->categoryArticles['items'], array(new articlesFilter($this->categoryArticles['items']), 'findAllDupeArticles'));
+	    $replaceChars   = articlesFilter::replacables();
+		if(is_array($allDUPES) && (count($allDUPES)>0)) {
+	    	echo ($this->debugger ? "<!-- [EXECUTE] => Dupes Scrubbing -->\n" : '');
+		    array_multisort( array_column($allDUPES, "title"), SORT_ASC, $allDUPES );
+	    	
+			foreach ($allDUPES as $key => $value) {
+				// The following logic will keep the first article in the dupes list and set the rest to be marked as read.
+	    		if  (str_replace($replaceChars, '', strtolower($value['title'])) === str_replace($replaceChars, '', strtolower($scrub['title']))) { 
+	       	   		unset($allDUPES[$key]);
+		       		$scrub['title'] = $value['title'];
+		       	} 
+			}	
+			$this->getArticleIDs($allDUPES);
+	    } 
+	}
+
+	function checkPosted() {
+		/**
+		 *  Looks for dupes in the articles already posted to the website.
+		 */
+	    echo ($this->debugger ? "<!-- [EXECUTE] => Filter Out Already Posted Articles -->\n" : '');
 
 		$scrub['title'] = '';
 		$allDUPES       = array_filter($this->categoryArticles['items'], array(new articlesFilter($this->categoryArticles['items']), 'findAllDupeArticles'));

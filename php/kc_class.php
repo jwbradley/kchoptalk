@@ -61,6 +61,7 @@ class kcbeerclass {
 		echo "\t\t\t\t\t<li><a href=\"./\">Beer<br />News</a></li>\n";
 		// // echo "\t\t\t\t\t<li><a href=\"./calendar\">KC<br />Events</a></li>\n";
 		echo "\t\t\t\t\t<li><a href=\"./releases\">New<br />Releases</a></li>\n";
+		echo "\t\t\t\t\t<li><a href=\"./reviews\">Beer<br />Reviews</a></li>\n";
 		echo "\t\t\t\t\t<li><a href=\"./jobs\">Beer<br />Jobs</a></li>\n";
 		echo "\t\t\t\t\t<li><a href=\"./cooking\">Cook<br/>with<br/>Beer</a></li>\n";
 		echo "\t\t\t\t\t<li><a href=\"./recipes\">Beer<br/>Recipes</a></li>\n";
