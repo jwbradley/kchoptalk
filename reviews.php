@@ -5,10 +5,11 @@
     include('./php/header.php' );
     include('./php/kc_class.php');
 
-    echo "\n</head>\n<body>\n";
+    echo "\n</head>\n<body>\n"; 
 
-    $cur_page = '.' . htmlspecialchars($_SERVER["PHP_SELF"]);
-    $pageDetails = new kcbeerclass($debugging='Y');
+    $cur_page    =  '.' . htmlspecialchars($_SERVER["PHP_SELF"]);
+    $debugger    =  ((!isset($_GET['debug']))  ? ''    : htmlspecialchars($_GET['debug']));
+    $pageDetails =  new kcbeerclass($debugger);
     $pageDetails->menu_bar("Reviews", "The latest reviews of your favorite beers.", $cur_page);
 
 ?>
@@ -21,10 +22,9 @@
 
         <?php
         echo "\n";
-        $debugger       =  ((!isset($_GET['debug']))  ? ''    : htmlspecialchars($_GET['debug']));
 
         $jsonOut        =  './json/beerReviewArticles.json';
-        $pageDetails->pagesOutput($jsonOut);
+        $pageDetails->pagesOutput($jsonOut, 75, 60);
         
         ?>
         </div><!-- /.blog-main -->

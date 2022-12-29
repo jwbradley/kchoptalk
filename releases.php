@@ -4,10 +4,11 @@
     include('./php/class.bufferapp.php' );
     include('./php/header.php' );
     include('./php/kc_class.php');
+
     echo "\n</head>\n<body>\n";
 
-    $debugger    =  ((!isset($_GET['debug']))  ? 'N'    : htmlspecialchars($_GET['debug']));
     $cur_page    =  '.' . htmlspecialchars($_SERVER["PHP_SELF"]);
+    $debugger    =  ((!isset($_GET['debug']))  ? 'N'    : htmlspecialchars($_GET['debug']));
     $pageDetails =  new kcbeerclass($debugger);
     $pageDetails->menu_bar("New Releases", "Recently released and/or coming soon beers.", $cur_page);
 
@@ -23,7 +24,7 @@
         echo "\n";
 
         $jsonOut        =  './json/beerTraderNewsArticles.json';
-        $pageDetails->pagesOutput($jsonOut);
+        $pageDetails->pagesOutput($jsonOut, 50, 30);
         
         ?>
         </div><!-- /.blog-main -->

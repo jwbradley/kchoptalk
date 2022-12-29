@@ -7,8 +7,9 @@
 
     echo "\n</head>\n<body>\n";
 
-    $cur_page = '.' . htmlspecialchars($_SERVER["PHP_SELF"]);
-    $pageDetails = new kcbeerclass();
+    $cur_page    =  '.' . htmlspecialchars($_SERVER["PHP_SELF"]);
+    $debugger    =  ((!isset($_GET['debug']))  ? ''    : htmlspecialchars($_GET['debug']));
+    $pageDetails =  new kcbeerclass($debugger);
     $pageDetails->menu_bar("Beer \"How-To's\"", "Learn the latest tricks for making your favorite beverage.", $cur_page);
 
 ?>
@@ -21,10 +22,9 @@
 
         <?php
         echo "\n";
-        $debugger       =  ((!isset($_GET['debug']))  ? ''    : htmlspecialchars($_GET['debug']));
 
         $jsonOut        =  '/home/jambra49/kchoptalk.com/json/beerhowtos.json';
-        $pageDetails->pagesOutput($jsonOut);
+        $pageDetails->pagesOutput($jsonOut, 75, 300);
 
         ?>
         </div><!-- /.blog-main -->
