@@ -173,7 +173,7 @@ class kcbeerclass {
 		return false;
 	}
 
-	function pagesOutput($jsonFile) {
+	function pagesOutput($jsonFile, $maxOut=75, $maxAge=60) {
 
         $fileDate       =  date ("Y-m-d", filemtime($jsonFile));
         $str            =  file_get_contents($jsonFile);
@@ -182,32 +182,39 @@ class kcbeerclass {
         $prvLink        =  '';
         $htmlLink       =  '';
         $prvTitle       =  '';
+        $prvFingerPrint =  '';
           
-        echo ($this->debug ? "\n<!-- Processing .json file created on: {$fileDate} -->\n" : '');
-        if($this->debug) {
+        echo (($this->debug == 'Y') ? "\n<!-- Processing .json file created on: {$fileDate} -->\n" : '');
+        if(($this->debug == 'Y')) {
         	echo "<!-- We're dumping \$tNews:\n";
         	var_dump($tNews);
         	echo "End dump of \$tNews -->\n";
         }
 
         foreach($tNews as $key2=>$articles) {
+            $fingrprint =  $articles["fingerprint"];
             $headline   =  $articles["title"];
             $linkcoded  =  urlencode($articles["link"]);
+            $pubDate    =  $articles["published"];
+            $linkAge    =  floor((time()-($pubDate/1000))/60/60/24); // Days Old
             $justLink   =  (strstr($articles["link"], '&') ? stristr(preg_replace('#^https?://#', '', $articles["link"]), '&', true) : $articles["link"]);
             $TitleCoded =  urlencode($articles["title"]);
-            $outputKey[$postCounter]['link'] = "<a href=\"./post.php?l=".$linkcoded."&t=".htmlspecialchars($TitleCoded)."\" target=\"_blank\"><strong>".$headline."</strong></a><br />\n<br />\n";
+            $outputKey[$postCounter]['link'] = "<a href=\"./post.php?l=".$linkcoded."&t=".htmlspecialchars($TitleCoded)."\" target=\"_blank\"><strong>".$headline."</strong></a>\n\t\t<p style=\"font-size: 55%;\">Posted: " .date('l, F j, Y', strtotime(date('Y-m-d') . ' -'.$linkAge.' day')). "</p>";
 
-            echo ($this->debug ? "\n<!--         \$headline: {$headline} -->" : '');
-            echo ($this->debug ? "\n<!-- \$articles[\"link\"]: {$articles["link"]} -->" : '');
-            echo ($this->debug ? "\n<!--         \$justLink: {$justLink } -->\n" : '');
+            echo (($this->debug == 'Y') ? "\n<!--         \$headline: {$headline} -->" : '');
+            echo (($this->debug == 'Y') ? "\n<!-- \$articles[\"link\"]: {$articles["link"]} -->" : '');
+            echo (($this->debug == 'Y') && ($justLink != $articles["link"]) ? "\n<!--         \$justLink: {$justLink } -->" : '');
+            echo (($this->debug == 'Y') ? "\n<!--          \$pubDate: {$pubDate } or ".$linkAge." days ago. -->" : '');   
+            echo (($this->debug == 'Y') ? "\n<!--          \$maxDays: ".$maxAge."   -->" : '');  
 
-            if (($postCounter <= 75)  && ($justLink != $prvLink) && ($prvTitle != $headline)) { 
-                echo "\t<div class=\"beer-post\">";
+            if (($postCounter <= $maxOut) && ($prvFingerPrint != $fingrprint) && ($linkcoded != $prvLink) && ($prvTitle != $headline) && ($maxAge >= $linkAge)) { 
+                echo "\t<div class=\"beer-post\">\n\t\t";
                 echo $outputKey[$postCounter]['link'];
-                echo "</div>\n";
-                $prvLink  = $justLink;
-                $htmlLink = $outputKey[$postCounter]['link'];
-                $prvTitle = $headline;
+                echo "\n\t</div>\n";
+                $prvFingerPrint  = $fingrprint;
+                $prvLink         = $linkcoded;
+                $htmlLink        = $outputKey[$postCounter]['link'];
+                $prvTitle        = $headline;
                 ++$postCounter;
             }
         }

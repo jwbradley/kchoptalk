@@ -13,7 +13,7 @@ $beerFeeds    =  array('http://www.brewbound.com/feed/',
                        'http://thebrewermagazine.com/?feed=rss2', 
                        'http://www.porchdrinking.com/feed/'
                        );
-$findNewBeers =  array('releas', 'announc', 'introduc', 'adding', 'collaborat', 'team up', 'returns', 'returning', 'brews coming', 'launches', 'brews up', 'debuts');
+$findNewBeers =  array('releas', 'announc', 'introduc', 'adding', 'collaborat', 'team up', 'returns', 'returning', 'brews coming', 'launches', 'brews up', 'debuts', 'debuting');
 $start        =  new beerFeedClass($beerFeeds, $debugger);
 
 $start->tagFeedArticles($findNewBeers, $feedTag, $feedDays);

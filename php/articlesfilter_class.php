@@ -7,7 +7,7 @@ ini_set("error_log", "../logs/BeerErrors.log");
 class articlesFilter {
     private $servers      =  array();
     private $filter_keys  =  null;
-    const   replaceChars  =  array('-', '|', ':', ';', '—', '…', '...', ' ', '/', 'brewbound', '.com', '&', '\u2013');
+    const   replaceChars  =  array('-', '|', ':', ';', '‘', '’', "'", '—', '…', '...', ' ', '/', 'brewbound', '.com', '&', '\u2013');
 
     function __construct($filter_keys) {
     	echo "\n<!-- [INSTANCIATE] => articlesFilter Class -->\n";
@@ -56,7 +56,7 @@ class articlesFilter {
 
     function findAllDupeArticles($i) {
         /**
-         * Looking through the entire listing of category articles for duplicates.
+         * Looking through the entire listing of category articles for this is runduplicates.
          * The idea here is to have this class method is looking for the articles we don't want, 
          * by sending a boolean value back to the callback function from the array_filter function. 
          * True  -- Means this article IS A duplicate. This process will keep the article in the array, so it can marked READ.
@@ -66,17 +66,25 @@ class articlesFilter {
 		
         foreach ($this->filter_keys as $key => $value) {
 			if ($i['id'] !=  $value['id']) {
-            
+                $sim_check = similar_text($i['title'], $value['title'], $similar_percentage);
+
                 if  (str_replace(self::replaceChars, '', strtolower($i['title'])) === str_replace(self::replaceChars, '', strtolower($value['title']))) { 
 		    		$isDupe = true;
-					echo "<!-- Is Dupe:                     ".$value['title']." -->\n"; 
-					echo "<!-- Setting \$isDupe as:          "; var_export($isDupe); echo " -->\n"; 
+					echo "<!--                     Is Dupe: ".$value['title']." -->\n"; 
+					echo "<!--          Setting \$isDupe as: "; var_export($isDupe); echo " -->\n"; 
+
+                } elseif ( $similar_percentage >= 80 ) {
+                    /* Some of the feedly duped articles have very similar text, and I want to exclude these articles, too. */
+                        $isDupe = true;
+                        echo "<!--  \$value is ".round($similar_percentage)."% Similar Text: ".$value['title']." -->\n"; 
+                        echo "<!--          Setting \$isDupe as: "; var_export($isDupe); echo " -->\n"; 
+
 	        	}  elseif (stripos($i['title'], ' - ') == true) {
                     /* Some of the feedly duped articles only have different text after the dash separator, and I want to exclude these articles, too. */
                     if ( substr($i['title'], 0, stripos($i['title'], ' - ')) == substr($value['title'], 0, stripos($i['title'], ' - ')) ) {
                         $isDupe = true;
-                        echo "<!-- \$value is a DASH Dupe:       ".$value['title']." -->\n"; 
-                        echo "<!-- Setting \$isDupe as:          "; var_export($isDupe); echo " -->\n"; 
+                        echo "<!--       \$value is a DASH Dupe: ".$value['title']." -->\n"; 
+                        echo "<!--          Setting \$isDupe as: "; var_export($isDupe); echo " -->\n"; 
                     } 
 
                 } elseif (stripos($i['title'], ' | ')  == true) {
@@ -84,11 +92,9 @@ class articlesFilter {
                     if ( substr($i['title'], 0, stripos($i['title'], ' | ')) == substr($value['title'], 0, stripos($i['title'], ' | ')) ) {
                         $isDupe = true;
                         echo "<!-- \$value is vertical bar Dupe: ".$value['title']." -->\n"; 
-                        echo "<!-- Setting \$isDupe as:          "; var_export($isDupe); echo " -->\n"; 
+                        echo "<!--          Setting \$isDupe as: "; var_export($isDupe); echo " -->\n"; 
                     }
-
                 }
-
 	        }
         }
 		return $isDupe;

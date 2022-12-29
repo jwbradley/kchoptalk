@@ -9,8 +9,8 @@ $start       =  new beerFeedClass('', $debugger);
 
 $jsonOut     =  beerFeedClass::beerCookTags;
 $feedTag     =  '/tag/f02777b6-1cd8-4176-928e-e513fc36dca7'; 
-$feedCount   =  200;
-$feedDays    =  60;
+$feedCount   =  250;
+$feedDays    =  0;
 
 $curl        =  $start->getFeedly($start->feedlyStreamURL($feedTag, $feedCount, $feedDays));
 $mycoder     =  json_decode(curl_exec($curl), true);

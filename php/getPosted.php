@@ -10,7 +10,7 @@ $jsonOut      =  beerFeedClass::PostedArticles;
 $beerFeeds    =  'http://kchoptalk.com/index-rss.php';
 $feedDays     =  31;
 $readOnly     =  'false';
-$counter      =  1000;
+$counter      =  250;
 $start        =  new beerFeedClass('', $debugger);
 
 $start->jsonOutput($jsonOut, curl_exec($start->getFeedly($start->feedlyGetSearch($beerFeeds, $feedDays, $readOnly, $counter))), 'N');

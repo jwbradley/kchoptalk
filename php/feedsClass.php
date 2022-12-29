@@ -3,6 +3,7 @@
 use myfeeds\articlesFilter as articlesFilter;
 require './articlesfilter_class.php';
 ini_set("error_log", "../logs/BeerErrors.log");
+set_time_limit(0);
 
 class beerFeedClass {
    
@@ -68,17 +69,23 @@ class beerFeedClass {
         return "https://cloud.feedly.com";
     }
 
-	function feedlyGetSearch ($searchStream, $feedDays=31, $readonly='true', $counter=200) {
+	function feedlyGetSearch ($searchStream, $feedDays=31, $readonly='true', $counter=250) {  /* This seems like redundant code.  Maybe collapse to feedlyStreamURL(). */
 		echo ($this->debugger ? "\n<!-- [EXECUTE] => feedlyGetSearch -->" : '');
-		return $this->getApiBaseUrl() . "/v3/streams/contents?streamId=".urlencode("feed/".$searchStream)."&unreadOnly=".$readonly."&count=".$counter."&newerThan=".(time() - ($feedDays*24*60*60).'.0000');	
+		// return $this->getApiBaseUrl() . "/v3/streams/contents?streamId=".urlencode("feed/".$searchStream)."&unreadOnly=".$readonly."&count=".$counter."&newerThan=".(time() - ($feedDays*24*60*60).'.0000');	
+		// return $this->getApiBaseUrl() . "/v3/streams/contents?streamId=".urlencode("feed/".$searchStream)."&unreadOnly=".$readonly."&count=".$counter."&newerThan=".(floor(microtime(true) * 1000) - ($feedDays*24*60*60));
+		return $this->getApiBaseUrl() . "/v3/streams/contents?streamId=".urlencode("feed/".$searchStream)."&unreadOnly=".$readonly."&count=".$counter;
 	}
 	
-	function feedlyGetStreamContents () {
+	function feedlyGetStreamContentsURL () { 
+		/**
+		 *  This method creates the URL used to get a list of Unread articles in the Beer Category. 
+		 **/
+		$continuing = (isset($this->categoryArticles["continuation"]) ?  ($this->categoryArticles["continuation"] != '' ? "&continuation=".$this->categoryArticles["continuation"] : '') : '');
 		echo ($this->debugger ? "\n<!-- [EXECUTE] => feedlyGetStreamContents -->" : '');
-		return $this->getApiBaseUrl() . "/v3/streams/contents?streamId=user/".$this->theFeedlyID."/category/Beer&count=1000&unreadOnly=true";	
+		return $this->getApiBaseUrl() . "/v3/streams/contents?streamId=user/".$this->theFeedlyID."/category/Beer&count=250&unreadOnly=true".$continuing;	
 	}
 	
-	function feedlyTagId ($feedTag, $theID) {
+	function feedlyTagId ($feedTag, $theID) { 
 		echo ($this->debugger ? "\n<!-- [EXECUTE] => feedlyTagId -->" : '');
 		echo ($this->debugger ? "\n<!-- \$this->theFeedlyID   = \"{$this->theFeedlyID}\"; \$feedTag=\"{$feedTag}\"; \$theID=\"{$theID}\"  -->\n" : '');
 		return $this->getApiBaseUrl() . "/v3/tags/".urlencode("user/".$this->theFeedlyID).urlencode($feedTag)."/".$theID;
@@ -89,9 +96,12 @@ class beerFeedClass {
 		return $this->getApiBaseUrl() . "/v3/markers";
 	}	
 
-	function feedlyStreamURL ($feedTag='/tag/Beer Traders', $feedCount=150, $feedDays=31) {
+	function feedlyStreamURL ($feedTag='/tag/Beer Traders', $feedCount=100, $feedDays=31, $unreadonly='true') {
+		/**
+		 *  This method creates the URL used to get a list of $feedTag items, that will be saved into our .json file
+		 **/
 		echo ($this->debugger ? "\n<!-- [EXECUTE] => feedlyStreamURL -->" : '');
-		return $this->getApiBaseUrl() . "/v3/streams/contents?streamId=".urlencode("user/".$this->theFeedlyID).urlencode($feedTag).($feedCount > 0 ? "&count=".$feedCount : '')."&newerThan=".(time() - ($feedDays*24*60*60));
+		return $this->getApiBaseUrl() . "/v3/streams/contents?streamId=".urlencode("user/".$this->theFeedlyID).urlencode($feedTag).($feedCount > 0 ? "&count=".$feedCount : '').(isset($unreadonly) ? "&unreadonly=".$unreadonly : '').($feedDays==0 ? '' :"&newerThan=".(time() - ($feedDays*24*60*60)));
 	}
 
 	function refreshFeedlyToken () {
@@ -174,7 +184,7 @@ class beerFeedClass {
 		 *  Get all of the articles from a feedly category.
 		 */
 	    echo ($this->debugger ? "<!-- [EXECUTE] => getCategoriesArticles -->\n" : '');
-		$this->cat_url           =  $this->getFeedly($this->feedlyGetStreamContents());
+		$this->cat_url           =  $this->getFeedly($this->feedlyGetStreamContentsURL());
 		$this->categoryArticles  =  json_decode(curl_exec($this->cat_url), true);
 		curl_close($this->cat_url);	
 	}
@@ -203,62 +213,106 @@ class beerFeedClass {
 	   	}
 	}
 
-	function filterDupes() {
+	function filterDupes($filteringArray) {
 		/**
 		 *  Looks for duplicate articles
 		 */
 	    echo ($this->debugger ? "<!-- [EXECUTE] => Filter Duplicate Articles -->\n" : '');
 
 		$scrub['title'] = '';
-		$allDUPES       = array_filter($this->categoryArticles['items'], array(new articlesFilter($this->categoryArticles['items']), 'findAllDupeArticles'));
+		$allDUPES       = array_filter($filteringArray, array(new articlesFilter($filteringArray), 'findAllDupeArticles'));
 	    $replaceChars   = articlesFilter::replacables();
 		if(is_array($allDUPES) && (count($allDUPES)>0)) {
 	    	echo ($this->debugger ? "<!-- [EXECUTE] => Dupes Scrubbing -->\n" : '');
-		    array_multisort( array_column($allDUPES, "title"), SORT_ASC, $allDUPES );
+		    array_multisort( array_column($allDUPES, "title"), SORT_ASC, SORT_STRING|SORT_FLAG_CASE, $allDUPES );
 	    	
 			foreach ($allDUPES as $key => $value) {
 				// The following logic will keep the first article in the dupes list and set the rest to be marked as read.
-	    		if  (str_replace($replaceChars, '', strtolower($value['title'])) === str_replace($replaceChars, '', strtolower($scrub['title']))) { 
-	       	   		unset($allDUPES[$key]);
+	    		$similarChecker = similar_text($scrub['title'], $value['title'], $similar_percentage);
+	    		if  (( str_replace($replaceChars, '', strtolower($value['title'])) != str_replace($replaceChars, '', strtolower($scrub['title'])) ) && ($similar_percentage <80)) { 
 		       		$scrub['title'] = $value['title'];
-		       	} 
+		       		echo "<!-- keeping 1st DUPE: ".$value['title']."; \$similar_percentage = ".round($similar_percentage)."% -->\n";
+	       	   		unset($allDUPES[$key]);
+		       	}
 			}	
+	    	echo ($this->debugger ? "<!-- [CALL] => Load Duplicate ID's into global variable (\$this->markReadList) that will get marked as read. -->\n" : '');
 			$this->getArticleIDs($allDUPES);
 	    } 
 	}
 
-	function checkPosted() {
+	function checkPosted($inBoundArray) {
 		/**
-		 *  Looks for dupes in the articles already posted to the website.
+		 *  Looks for dupes in the articles already posted to the website. 
+		 *  I feel like this could use code already built. Eitherway, we're starting here.
+		 * 
+		 * 	We're going to get a array from external and then use it against the Filter to find all of the articles that have been posted.
+		 * 
+		 *  Still trying to work out the logic on this idea.
+		 * 
 		 */
-	    echo ($this->debugger ? "<!-- [EXECUTE] => Filter Out Already Posted Articles -->\n" : '');
+	    // echo ($this->debugger ? "<!-- [EXECUTE] => Filter Out Already Posted Articles -->\n" : '');
+	    // $this->getCategoriesArticles();
+		// $scrub['title'] = '';
+	    // echo ($this->debugger ? "<!-- [EXECUTE] => Start Array Filter -->\n" : '');
+		// $allDUPES       = array_filter($inBoundArray['items'], array(new articlesFilter($this->categoryArticles['items']), 'findAllDupeArticles'));
+	    // $replaceChars   = articlesFilter::replacables();
 
-		$scrub['title'] = '';
-		$allDUPES       = array_filter($this->categoryArticles['items'], array(new articlesFilter($this->categoryArticles['items']), 'findAllDupeArticles'));
-	    $replaceChars   = articlesFilter::replacables();
-		if(is_array($allDUPES) && (count($allDUPES)>0)) {
-	    	echo ($this->debugger ? "<!-- [EXECUTE] => Dupes Scrubbing -->\n" : '');
-		    array_multisort( array_column($allDUPES, "title"), SORT_ASC, $allDUPES );
+
+	    // echo ($this->debugger ? "\n<!-- [DUMP] => Array \$allDUPES -->\n" : '');
+	    // var_dump($allDUPES);
+
+	    // echo ($this->debugger ? "<!-- [EXECUTE] => Loop The Array of DUPES -->\n" : '');
+		// if(is_array($allDUPES) && (count($allDUPES)>0)) {
+	    // 	echo ($this->debugger ? "<!-- [EXECUTE] => Dupes Scrubbing -->\n" : '');
+		//     array_multisort( array_column($allDUPES, "title"), SORT_ASC, $allDUPES );
 	    	
-			foreach ($allDUPES as $key => $value) {
-				// The following logic will keep the first article in the dupes list and set the rest to be marked as read.
-	    		if  (str_replace($replaceChars, '', strtolower($value['title'])) === str_replace($replaceChars, '', strtolower($scrub['title']))) { 
-	       	   		unset($allDUPES[$key]);
-		       		$scrub['title'] = $value['title'];
-		       	} 
-			}	
-			$this->getArticleIDs($allDUPES);
-	    } 
+		// 	foreach ($allDUPES as $key => $value) {
+		// 		// The following logic will keep the first article in the dupes list and set the rest to be marked as read.
+	    // 		if  (str_replace($replaceChars, '', strtolower($value['title'])) === str_replace($replaceChars, '', strtolower($scrub['title']))) { 
+	    //    	   		unset($allDUPES[$key]);
+		//        		$scrub['title'] = $value['title'];
+		//        	} 
+		// 	}	
+	    // } 
+		// return $this->getArticleIDs($allDUPES);
+	}
+
+	function getArticlesListing () {
+		$ContinueFlag = true;
+		do {
+			    echo ($this->debugger ? "\n<!-- [EXECUTE] => Articles Reader -->\n" : '');
+				$this->getCategoriesArticles();
+				$feedArticles[] =  $this->categoryArticles;
+				$ContinueFlag   =  ($this->categoryArticles["continuation"] != '' ? true : false);
+		} while ($ContinueFlag  == true);
+		
+		foreach ($feedArticles as $key => $nextLevel) {
+			foreach ($nextLevel as $key => $thirdLevel) {
+				if(is_array($thirdLevel)) {
+					foreach ($thirdLevel as $key => $continuationSection) {
+					    $this->ArticlesArray[] = $continuationSection;
+					}
+				}
+			}
+		}
+		
 	}
 
 	function filterFeedArticles($keepThese) {
 		/**
 		 *  Looks for articles that do not have any of the passed in key words
 		 */
-		$this->getCategoriesArticles();
-		$this->filterDupes();
+
 	    echo ($this->debugger ? "\n<!-- [EXECUTE] => filterFeedArticles -->\n" : '');
-		$this->getArticleIDs(array_filter($this->categoryArticles['items'], array(new articlesFilter($keepThese), 'bulkFilterArticles')));
+	    $this->getArticlesListing();
+
+		echo ($this->debugger ? "\n<!-- [CALL] => Filter Out Dupes. -->\n" : '');	
+		$this->filterDupes($this->ArticlesArray);
+
+		echo ($this->debugger ? "\n<!-- [CALL] => Load Non-Beer Articles to be marked as read. -->\n" : '');	
+		$this->getArticleIDs(array_filter($this->ArticlesArray, array(new articlesFilter($keepThese), 'bulkFilterArticles')));
+		
+		echo ($this->debugger ? "\n<!-- [CALL] => feedTagger() Method to mark articles as read. -->\n" : '');	
 		$this->feedTagger('', 'N'); 
 	}
 
@@ -266,14 +320,17 @@ class beerFeedClass {
 		/**
 		 *  Gets a list of all the articles in a feedly category.
 		 */
+
 	    echo ($this->debugger ? "<!-- [EXECUTE] => bulkTagFeedArticles -->\n" : '');
-		$this->getCategoriesArticles();
-		// var_dump(array_filter($this->categoryArticles['items'], array(new articlesFilter($tagThese), 'bulkTagArticles')));
-		$this->getArticleIDs(array_filter($this->categoryArticles['items'], array(new articlesFilter($tagThese), 'bulkTagArticles')));
+	    $this->getArticlesListing();
+
+		$this->getArticleIDs(array_filter($this->ArticlesArray, array(new articlesFilter($tagThese), 'bulkTagArticles')));
+		echo ($this->debugger ? "\n<!-- [CALL] => feedTagger() Method to Tag and Mark articles as read. -->\n" : '');	
 		$this->feedTagger($tag, 'Y');
+
 	}
 
-	function getFeedsArticles() {
+	function getFeedsArticles($days=31) {
 	    /**
 	     * This method gets all of the atricles from multiple feedly subscriptions. 
 	     */			
@@ -294,19 +351,21 @@ class beerFeedClass {
 	    echo ($this->debugger ? "\n<!-- [EXECUTE] => getArticleIDs -->\n" : '');
 	    // var_dump($articlesList);
 		if(is_array($articlesList)) {
-			foreach($articlesList as $feed=>$streamdata)  {
+			foreach($articlesList as $feed => $streamdata)  {
+				
 				echo ($this->debugger !=  '' ? "\n<!-- Article Title: \"{$streamdata['title']}\" -->\n"         : '');
 				echo ($this->debugger !=  '' ? "<!-- Article ID:    \"{$streamdata['id']}\" -->\n"         : '');
 				// echo ($this->debugger !=  '' ? "<!-- Article ID:    \"".(!$streamdata['canonicalUrl'] ? $streamdata['alternate'] : $streamdata['canonicalUrl'])"\" -->\n"         : '');
 				$this->markReadList   .=  (strlen($this->markReadList   )>0  ? ",".'"'.$streamdata['id'].'"'    : '"'.$streamdata['id'].'"'    ) ;
 				$this->tagList        .=  (strlen($this->tagList)>0  ? ','.urlencode($streamdata['id']) : urlencode($streamdata['id']) ) ;
+				
 			}
 		}
 	}
 
 	function tagFeedArticles($searches, $tag, $days=31, $justFilter='N') {
 		
-		$this->getFeedsArticles();
+		$this->getFeedsArticles($days);
 		foreach($this->theArticles as $key => $searchFeed)  { 
 			if(is_array($searchFeed)) {
 				$this->getArticleIDs(array_filter($searchFeed, array(new articlesFilter($searches), 'bulkTagArticles')));
@@ -321,12 +380,16 @@ class beerFeedClass {
 			foreach($inputData as $feed=>$items)  {
 				if(is_array($items)) {
 					foreach($items as $item_no => $streamdata)  {  
+						$outputData[$item_no]["fingerprint"] = $streamdata["fingerprint"];
 						$outputData[$item_no]["title"] = $streamdata["title"];
 						if (strpos($streamdata["originId"] , 'http') !== false) {
-							$outputData[$item_no]["link"] = $streamdata["originId"];
+							$outputData[$item_no]["link"]  = $streamdata["originId"];
 						} else {
-							$outputData[$item_no]["link"] = $streamdata["alternate"][0]["href"];
+							$outputData[$item_no]["link"]  = $streamdata["alternate"][0]["href"];
 						}
+						$outputData[$item_no]["crawled"]   = $streamdata["crawled"];
+						$outputData[$item_no]["published"] = $streamdata["published"];
+						$outputData[$item_no]["actionTimestamp"] = $streamdata["actionTimestamp"];
 					}  
 				}
 			}
