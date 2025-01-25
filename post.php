@@ -1,16 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<META HTTP-EQUIV="refresh" CONTENT="1800">
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <?php
-// error_reporting(E_ALL ^ E_NOTICE);
-    ini_set("error_log", "./logs/BeerErrors.log");
-if ((isset($_GET['l'])) && (isset($_GET['t'])) ){
-	// $redirlink  = urldecode(base64_decode(htmlspecialchars($_GET['l'])));  // Decode the encoded link
-	// $redirtitle = urldecode(base64_decode(htmlspecialchars($_GET['t'])));  // Decode the encoded title
-	$redirlink  = urldecode($_GET['l']);  // Decode the encoded link
-	$redirtitle = urldecode($_GET['t']);  // Decode the encoded title
+
+if ((isset($_GET['beerlink'])) && (isset($_GET['title'])) ){
+	$redirlink  = urldecode($_GET['beerlink']);  // Decode the encoded link
+	$redirtitle = urldecode($_GET['title']);  // Decode the encoded title
 
 } else {
 	$redirlink  = "http://kchoptalk.com";
@@ -27,31 +19,39 @@ if($debugger) {
 	
 }
 
-// echo "\n\t<meta charset=\"utf-8\">\n\t<meta http-equiv=\"refresh\" content=\"0;URL='".$redirlink."'\"/>\n\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"; 
-echo "\t<title>".$redirtitle."</title>\n";
+$random123 = "beerArticle".rand(10000, 99999);
+
+echo "<!DOCTYPE html>\n";
+echo "<html>\n";
+echo "<head>\n";
+echo "\t<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\" />\n";
+echo "\t<meta http-equiv=\"Content-Security-Policy\" content=\"default-src 'self'; script-src 'self' 'nonce-{$random123}' https://www.googletagmanager.com; object-src 'none'; base-uri 'self';\">\n";
+echo "\t<title id=\"pagetitle\"></title>\n";
+echo "</head>\n";
+echo "<body>\n";
+echo "\t<div style=\"margin: 60px 300px;\">\n";
+echo "\t\t<div align=center>\n";
+echo "\t\t\t<h1 id=\"pageheadline\"></h1>\n";
+echo "\t\t</div>\n";
+echo "\t\t<div>\n";
+echo "\t\t\t<p id=redirecttext align=center></p>\n";
+echo "\t\t</div>\n";
+echo "\t\t<div align=center>\n";
+echo "\t\t\t<img border=\"0\" src=\"https://kchoptalk.com/Pics/KCHopTalkLogo-172x172.png\" alt=\"Please Wait\" width=\"172\" height=\"172\">\n";
+echo "\t\t</div>\n";
+echo "\t</div>\n";
+echo "</body>\n";
+
+echo "<!-- Google tag (gtag.js) -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-966WLPDH79\"></script>\n<script nonce=\"{$random123}\" >\n\twindow.dataLayer = window.dataLayer || [];\n\tfunction gtag(){dataLayer.push(arguments);}\n\tgtag('js', new Date());\n\t\n\tgtag('config', 'G-966WLPDH79');\n</script>\n";
+
+echo "<script nonce=\"{$random123}\">";
+
+echo "</script>\n";
+echo "document.getElementById(\"pagetitle\").innerHTML = \"" . $redirtitle . "\";\n";
+echo "document.getElementById(\"pageheadline\").innerHTML = \"Opening Article: " . $redirtitle . "\";\n";
+echo "document.getElementById(\"redirecttext\").innerHTML = \"Please wait for the external page to load. If the page does not load within the appropriate amount of time, you might need to <a href='" . addslashes($redirlink) . "'>retry the link</a>.\";\n";
+echo "function pageRedirect() {\n\twindow.location.replace(\"" . trim($redirlink) . "\");\n}\n";
+echo "setTimeout(pageRedirect, 1);\n";
+echo "</html>\n";
+
 ?>
-	<meta name="author" content="James Bradley" >
-	<meta name="copyright" content="Copyright 2012-<?php echo date("Y"); ?> KC Hop Talk">
-	
-	<meta property="og:title" content="<?php echo $redirtitle; ?>"/>
-	<meta property="og:url" content="<?php echo $redirlink; ?>" />
-
-	</head>
-	<body>
-		
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-37565453-19"></script>
-	<script>
-	  window.dataLayer = window.dataLayer || [];
-	  function gtag(){dataLayer.push(arguments);}
-	  gtag('js', new Date());
-
-	  gtag('config', 'UA-37565453-19');
-	</script>
- 
-    <script language="javascript">
-        <?php echo "window.open('".trim($redirlink)."', '_parent', '');"; ?>
-    </script>
-
-	</body>
-</html>
