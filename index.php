@@ -74,7 +74,7 @@
                   $TitleCoded = urlencode($headline);
                   
                   $descript   = ( $hrefDesc == '' || strtolower($hrefDesc) == 'null' ? '' : "<br /><div style=\"font-size: small; padding-left: 10pt; \">".$hrefDesc."</div>" );
-                  $outputKey[$postCounter]['link'] = "<a href=\"./post.php?l=".$linkcoded."&t=".htmlspecialchars($TitleCoded)."\" target=\"_blank\"><strong>".$headline."</strong></a>";
+                  $outputKey[$postCounter]['link'] = "<a href=\"./post.php?beerlink=".$linkcoded."&title=".htmlspecialchars($TitleCoded)."\" target=\"_blank\"><strong>".$headline."</strong></a>";
 
                 }
                 
