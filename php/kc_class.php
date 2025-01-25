@@ -199,7 +199,7 @@ class kcbeerclass {
             $linkAge    =  floor((time()-($pubDate/1000))/60/60/24); // Days Old
             $justLink   =  (strstr($articles["link"], '&') ? stristr(preg_replace('#^https?://#', '', $articles["link"]), '&', true) : $articles["link"]);
             $TitleCoded =  urlencode($articles["title"]);
-            $outputKey[$postCounter]['link'] = "<a href=\"./post.php?l=".$linkcoded."&t=".htmlspecialchars($TitleCoded)."\" target=\"_blank\"><strong>".$headline."</strong></a>\n\t\t<p style=\"font-size: 55%;\">Posted: " .date('l, F j, Y', strtotime(date('Y-m-d') . ' -'.$linkAge.' day')). "</p>";
+            $outputKey[$postCounter]['link'] = "<a href=\"./post.php?beerlink=".$linkcoded."&title=".htmlspecialchars($TitleCoded)."\" target=\"_blank\"><strong>".$headline."</strong></a>\n\t\t<p style=\"font-size: 55%;\">Posted: " .date('l, F j, Y', strtotime(date('Y-m-d') . ' -'.$linkAge.' day')). "</p>";
 
             echo (($this->debug == 'Y') ? "\n<!--         \$headline: {$headline} -->" : '');
             echo (($this->debug == 'Y') ? "\n<!-- \$articles[\"link\"]: {$articles["link"]} -->" : '');
