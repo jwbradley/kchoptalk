@@ -54,17 +54,17 @@
                 $outputKey[$postCounter]['rank'] =  ($theLink['statistics']['reshares']*20) + ($theLink['statistics']['clicks']*15) + ($theLink['statistics']['likes']*10) + ($theLink['statistics']['comments']*5);
                 if ((strrpos($theLink['text'], 'https://') > 0 ) ||  (strrpos($theLink['text'], 'http://') > 0 )) {
                   $hrefLink    = htmlspecialchars( substr($theLink['text'], strrpos($theLink['text'], 'http'), strlen($theLink['text'])-strrpos($theLink['text'], 'http') ) ) ;
-                  $headline    = substr($theLink['text'], 0, strrpos($theLink['text'], 'http') );                  
-                  $hrefDesc    =  ($theLink['media']['title'] == '404' ? '' : $theLink['media']['description']);
+                  $headline    = htmlspecialchars(substr($theLink['text'], 0, strrpos($theLink['text'], 'http') ));
+                  $hrefDesc    =  ($theLink['media']['title'] == '404' ? '' : htmlspecialchars($theLink['media']['description']));
 
                   /* blacklisted site */
                   $hrefLink    =  (stripos($theLink['media']['title'], 'mybeerbuzz') === false ? (stripos($theLink['media']['expanded_link'], 'mybeerbuzz') === false ? $hrefLink : '') : '');
                   
                 } else if ((strrpos($theLink['text'], 'https://') == 0 ) && (strrpos($theLink['text'], 'http://') == 0 ) ) { 
                     $hrefLink    =  htmlspecialchars( $theLink['media']["link"] ) ;
-                    $headline    =  $theLink['text'];
+                    $headline    =  htmlspecialchars($theLink['text']);
                     $hrefTitle   =  $theLink['media']['title'];
-                    $hrefDesc    =  ($theLink['media']['title'] == '404' ? '' : $theLink['media']['description']);;
+                    $hrefDesc    =  ($theLink['media']['title'] == '404' ? '' : htmlspecialchars($theLink['media']['description']));
                     $hrefThumb   =  $theLink['media']['thumbnail'];
                 }
 

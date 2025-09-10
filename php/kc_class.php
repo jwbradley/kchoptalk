@@ -193,7 +193,7 @@ class kcbeerclass {
 
         foreach($tNews as $key2=>$articles) {
             $fingrprint =  $articles["fingerprint"];
-            $headline   =  $articles["title"];
+            $headline   =  htmlspecialchars($articles["title"]);
             $linkcoded  =  urlencode($articles["link"]);
             $pubDate    =  $articles["published"];
             $linkAge    =  floor((time()-($pubDate/1000))/60/60/24); // Days Old
