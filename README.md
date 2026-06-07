@@ -1,4 +1,4 @@
-# kchoptalk
+# Kansas City Hop Talk
 This is the code that runs on the kchoptalk.com website.
 
 It's the sort of site one builds when they get tired of the manual processes needed to maintain a content curation website. Almost all of the processes in this code were developed from manual steps that I wished to automate. The first iterations of this code consisted of some basic code to scrape content from websites. 
